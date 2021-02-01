@@ -16,4 +16,27 @@
     #define CASIMIR_EXPORT 
 #endif
 
+// Determining the platform preferred number of bytes
+#if _WIN32 || _WIN64
+   #if _WIN64
+     #define CASIMIR_ENV_x64
+  #else
+    #define CASIMIR_ENV_x32
+  #endif
+#endif
+
+#if __GNUC__
+  #if __x86_64__ || __ppc64__
+    #define CASIMIR_ENV_x64
+  #else
+    #define CASIMIR_ENV_x32
+  #endif
+#endif
+
+// Assert that at least one of the two environment as been detected
+#if !defined(CASIMIR_ENV_x64) && !defined(CASIMIR_ENV_x32)
+    #error "Cannot detect the environment (x32 / x64) of the current platform"
+#endif 
+
+
 #endif

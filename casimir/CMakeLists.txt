@@ -8,7 +8,8 @@ set(CASIMIR_SOURCE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/src")
 # List all of the header aimed at being exported by the library
 # Template: **/**/**.h  or  **/**/**.hpp
 set(CASIMIR_EXPORTED_HEADER
-    
+    "casimir/configuration.hpp"
+    "casimir/casimir.hpp"
 ) 
 
 
@@ -20,8 +21,8 @@ set(CASIMIR_SOURCE_FILES
 
 
 # Configure the file input for the CASIMIR library
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/configuration.h.in" 
-    "${CASIMIR_INCLUDE_DIRS}/configuration.h")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/configuration.hpp.in" 
+    "${CASIMIR_INCLUDE_DIRS}/casimir/configuration.hpp")
 
 
 # Adding the CASIMIR library
