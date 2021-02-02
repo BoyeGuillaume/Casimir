@@ -1,5 +1,5 @@
-#ifndef CASIMIR_H_
-#define CASIMIR_H_
+#ifndef CASIMIR_HPP_
+#define CASIMIR_HPP_
 
 #include <casimir/configuration.hpp>
 #include <type_traits>

@@ -1,0 +1,21 @@
+#ifndef CASIMIR_STRINGSERIALIZABLE_HPP_
+#define CASIMIR_STRINGSERIALIZABLE_HPP_
+
+#include "../casimir.hpp"
+
+namespace Casimir {
+
+    namespace utilities {
+
+        class String;
+
+        class StringSerializable {
+        public:
+            virtual String toString() const = 0;
+        };
+
+    };
+
+};
+
+#endif
