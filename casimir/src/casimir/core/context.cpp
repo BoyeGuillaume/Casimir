@@ -1,5 +1,5 @@
-#include <casimir/core/context.hpp>
-#include <casimir/core/private-context.hpp>
+#include "context.hpp"
+#include "private-context.hpp"
 
 namespace Casimir {
 

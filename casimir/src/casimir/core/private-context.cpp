@@ -1,4 +1,4 @@
-#include <casimir/core/private-context.hpp>
+#include "private-context.hpp"
 
 namespace Casimir {
 

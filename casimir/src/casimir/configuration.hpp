@@ -1,5 +1,5 @@
-#ifndef CASIMIR_CONFIGURATION_HPP_
-#define CASIMIR_CONFIGURATION_HPP_
+#ifndef CASIMIR_CONFIGURATION_H_
+#define CASIMIR_CONFIGURATION_H_
 
 #define CASIMIR_VERSION_MAJOR 0
 #define CASIMIR_VERSION_MINOR 0
@@ -9,6 +9,15 @@
 #define CASIMIR_DESCRIPTION   Optimise an computational graph for GPU/CPU
 
 /* #undef CASIMIR_BUILD_SHARED */
+#define CASIMIR_SAFE_CHECK   ON
+
+#ifndef CASIMIR_SAFE_CHECK
+#if defined(_MSC_VER)
+#pragma message ( "WARNING: Casimir was build without the option CASIMIR_SAFE_CHECK. We strongly advise you to re-enable this option as it make the Bug far more complex to understand without it" )
+#else
+#warning "WARNING: Casimir was build without the option CASIMIR_SAFE_CHECK. We strongly advise you to re-enable this option as it make the Bug far more complex to understand without it"
+#endif
+#endif
 
 #ifdef CASIMIR_BUILD_SHARED
     #define CASIMIR_EXPORT __declspec( dllexport )

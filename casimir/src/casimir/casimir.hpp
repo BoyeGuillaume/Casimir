@@ -1,15 +1,16 @@
 #ifndef CASIMIR_HPP_
 #define CASIMIR_HPP_
 
-#include <casimir/configuration.hpp>
+#include "configuration.hpp"
 #include <type_traits>
 
 namespace Casimir {
 
-    namespace core {};
-    namespace utilities {};
-    namespace framework {};
-    namespace literals {};
+    namespace core {}
+    namespace utilities {}
+    namespace framework {}
+    namespace literals {}
+    namespace literals {}
 
     // Create all the types of fixed size used by the API
     typedef unsigned char           ubyte;
@@ -33,6 +34,6 @@ namespace Casimir {
     // Size assertion for non supported platform
     static_assert(sizeof(int32) == 4,  "LP32 not supported");
     static_assert(sizeof(uint32) == 4, "LP32 not supported");
-};
+}
 
 #endif

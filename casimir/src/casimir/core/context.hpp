@@ -1,7 +1,7 @@
 #ifndef CASIMIR_CONTEXT_HPP_
 #define CASIMIR_CONTEXT_HPP_
 
-#include <casimir/configuration.hpp>
+#include "../configuration.hpp"
 
 namespace Casimir {
     class PrivateCasimirContext;

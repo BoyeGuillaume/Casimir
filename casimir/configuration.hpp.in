@@ -9,6 +9,15 @@
 #define CASIMIR_DESCRIPTION   @PROJECT_DESCRIPTION@
 
 #cmakedefine CASIMIR_BUILD_SHARED @CASIMIR_BUILD_SHARED@
+#cmakedefine CASIMIR_SAFE_CHECK   @CASIMIR_SAFE_CHECK@
+
+#ifndef CASIMIR_SAFE_CHECK
+#if defined(_MSC_VER)
+#pragma message ( "WARNING: Casimir was build without the option CASIMIR_SAFE_CHECK. We strongly advise you to re-enable this option as it make the Bug far more complex to understand without it" )
+#else
+#warning "WARNING: Casimir was build without the option CASIMIR_SAFE_CHECK. We strongly advise you to re-enable this option as it make the Bug far more complex to understand without it"
+#endif
+#endif
 
 #ifdef CASIMIR_BUILD_SHARED
     #define CASIMIR_EXPORT __declspec( dllexport )

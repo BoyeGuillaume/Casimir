@@ -32,8 +32,15 @@
 *.app
 
 # IDE internal configuration and other junk file
+**/.idea
 **/.vscode
+**/.vs
+**/cmake-build-debug
+**/cmake-build-release
 
 
 # Building folder
 **/[Bb]uild
+
+# Configuration files
+casimir/src/casimir/configuration.hpp
