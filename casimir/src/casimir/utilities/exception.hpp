@@ -24,11 +24,11 @@ namespace Casimir {
 
             CASIMIR_EXPORT Exception(const String& error, const String& cause, const String& file, const cuint& line);
 
-            _NODISCARD String toString() const override {
+            String toString() const override {
                 return m_str;
             }
 
-            _NODISCARD const char * what() const override {
+            const char * what() const override {
                 return toString().c_str();
             }
         };

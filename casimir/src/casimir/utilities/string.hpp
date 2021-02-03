@@ -56,7 +56,7 @@ namespace Casimir {
                 m_str.append(count, value);
             }
 
-            _NODISCARD inline cuint length() const {
+            inline cuint length() const {
                 return (cuint) m_str.length();
             }
 
@@ -64,7 +64,7 @@ namespace Casimir {
                 return m_str;
             }
 
-            _NODISCARD inline const char* c_str() const {
+            inline const char* c_str() const {
                 return m_str.c_str();
             }
 
