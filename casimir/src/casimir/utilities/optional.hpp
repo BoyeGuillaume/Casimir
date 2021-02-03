@@ -72,39 +72,39 @@ namespace Casimir {
              */
             template<class... argsTypes>
             inline static Optional<T> of(argsTypes&&... args) {
-                return Optional<>(std::make_shared<>(args));
+                return Optional<T>(std::make_shared<T>(args));
             }
 
             /**
-             * @brief Return a new instance of \link Optional<> that contain no data
-             * @return Empty instance of \link Optional<>
+             * @brief Return a new instance of \link Optional<T> that contain no data
+             * @return Empty instance of \link Optional<T>
              */
             inline static Optional<T> empty() {
                 return Optional<T>();
             }
 
             /**
-             * @brief whether or not the current instance of \link Optional<> hold any value
-             * @return whether or not a value is present in the current \link Optional<>
+             * @brief whether or not the current instance of \link Optional<T> hold any value
+             * @return whether or not a value is present in the current \link Optional<T>
              */
             inline bool isPresent() const {
                 return (bool) m_ref;
             }
 
             /**
-             * @brief whether or not the current instance of \link Optional<> hold no value
-             * @return whether or not the current \link Optional<> is empty
+             * @brief whether or not the current instance of \link Optional<T> hold no value
+             * @return whether or not the current \link Optional<T> is empty
              */
             inline bool isEmpty() const {
                 return ! ((bool) m_ref);
             }
 
             /**
-             * @brief Get the pointer hold by the instance of \link Optional<>
+             * @brief Get the pointer hold by the instance of \link Optional<T>
              * @throw \link utilities::Exception if no value is present in the current Optional
              * @return A pointer to the data hold by the current optional.
              * @note The given pointer is safe to use as long as the Optional is allocate. In the case where
-             * the \link Optional<> has been instantiate using directly a pointer the pointer is safe-to-use even after.
+             * the \link Optional<T> has been instantiate using directly a pointer the pointer is safe-to-use even after.
              */
             inline T* getPtr() const {
 #ifdef CASIMIR_SAFE_CHECK
@@ -125,7 +125,7 @@ namespace Casimir {
             }
 
             /**
-             * @brief Get the date hold by the instance of \link Optional<>
+             * @brief Get the date hold by the instance of \link Optional<T>
              * @throw \link utilities::Exception if no value is present in the current Optional
              * @tparam U the type of the create Optional (same as T)
              * @return the data hold by the optional
@@ -151,7 +151,7 @@ namespace Casimir {
              * @throw \link utilities::Exception if no value is present in the current Optional
              * @return A pointer to the data hold by the current optional.
              * @note The given pointer is safe to use as long as the Optional is allocate. In the case where
-             * the \link Optional<> has been instantiate using directly a pointer the pointer is safe-to-use even after.
+             * the \link Optional<T> has been instantiate using directly a pointer the pointer is safe-to-use even after.
              */
             inline T* operator->() const {
                 return getPtr();
@@ -185,10 +185,10 @@ namespace Casimir {
             }
 
             /**
-             * @brief map the \link Optional<> to another \link Optional<> of another type
+             * @brief map the \link Optional<T> to another \link Optional<T> of another type
              * @tparam U the destination type (type of the Optional after the mapping)
              * @param mapper Function used to map from type T to type U
-             * @return new instance of Optional that is empty if the current \link Optional<> is empty
+             * @return new instance of Optional that is empty if the current \link Optional<T> is empty
              * otherwise the mapped version of the current data
              */
             template<typename U, typename = std::enable_if_t<_isTCopyMove::value &&
