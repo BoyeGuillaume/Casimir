@@ -28,7 +28,7 @@ namespace Casimir {
                 return m_str;
             }
 
-            const char * what() const override {
+            const char * what() const noexcept override {
                 return toString().c_str();
             }
         };
