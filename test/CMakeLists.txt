@@ -1,15 +1,11 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
-# Include the directory
-message("INCLUDES: ${INCLUDES}")
-include_directories(${INCLUDES})
-
-# Setting up the Google test options
+# Set up the Google test options
 set(BUILD_GMOCK            OFF CACHE BOOL "Builds the googlemock subproject")
 set(INSTALL_GTEST          OFF CACHE BOOL "Enable installation of googletest. (Projects embedding googletest may want to turn this OFF.)")
 set(gtest_force_shared_crt ON CACHE BOOL "Use shared (DLL) run-time lib even when Google Test is built as static lib.")
 
-set(CASIMIR_GTEST_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+set(CASIMIR_GTEST_WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add the googletest subdirectory (where all the magics happen)
 add_subdirectory(googletest)
@@ -29,9 +25,6 @@ else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror -Wno-unused -Wno-unused-parameter")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
 endif()
-
-# Set the Google test working directory
-set(CASIMIR_GTEST_WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Retrieve a list of all the test files
 file(GLOB_RECURSE CASIMIR_FILE_TEST_LIST CONFIGURE_DEPENDS *_test.cpp)
