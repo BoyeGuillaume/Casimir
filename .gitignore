@@ -42,6 +42,7 @@
 # Building folder
 **/[Bb]uild
 **/[Oo]ut
+**/googletest
 
 # Configuration files
 casimir/src/casimir/configuration.hpp

@@ -13,6 +13,9 @@ set(CASIMIR_EXPORTED_HEADER
         "casimir/utilities/string.hpp"
         "casimir/utilities/string_serializable.hpp"
         "casimir/utilities/exception.hpp"
+        "casimir/utilities/uuid.hpp"
+        "casimir/utilities/logger.hpp"
+        "casimir/utilities/optional.hpp"
 )
 
 # List all of the other header used by the project but not exported by the library
@@ -29,6 +32,8 @@ set(CASIMIR_SOURCE_FILES
         "${CASIMIR_SOURCE_DIRS}/core/private-context.cpp"
         "${CASIMIR_SOURCE_DIRS}/utilities/string.cpp"
         "${CASIMIR_SOURCE_DIRS}/utilities/exception.cpp"
+        "${CASIMIR_SOURCE_DIRS}/utilities/uuid.cpp"
+        "${CASIMIR_SOURCE_DIRS}/utilities/logger.cpp"
 )
 
 # Retrieve all the headers to the expected format
