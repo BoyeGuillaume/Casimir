@@ -44,5 +44,6 @@ add_subdirectory(casimir)
 
 # If the testing option is enable add the required directory
 if(CASIMIR_TESTS)
+	enable_testing()
 	add_subdirectory(test)
 endif()
