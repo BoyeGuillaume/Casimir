@@ -12,14 +12,6 @@
 namespace Casimir {
 
     namespace utilities {
-        class String;
-    }
-
-    namespace literals {
-        CASIMIR_EXPORT utilities::String operator+(const utilities::String& a, const utilities::String& b);
-    }
-
-    namespace utilities {
 
         class String {
         private:
@@ -128,10 +120,6 @@ namespace Casimir {
             
             CASIMIR_EXPORT String replaceAll(const String& str, const String& replacement) const;
 
-            static String toString(cuint value) {
-                return String(std::to_string(value));
-            }
-
             static String toString(cint value) {
                 return String(std::to_string(value));
             }
@@ -143,11 +131,12 @@ namespace Casimir {
             static String toString(float value) {
                 return String(std::to_string(value));
             }
-
-        private:
-            friend String literals::operator+(const utilities::String& a, const utilities::String& b);
         };
 
+    }
+
+    namespace literals {
+        CASIMIR_EXPORT utilities::String operator+(const utilities::String& a, const utilities::String& b);
     }
 
 }

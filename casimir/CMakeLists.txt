@@ -27,6 +27,8 @@ set(CASIMIR_SOURCE_FILES
         "${CASIMIR_SOURCE_DIRS}/casimir.cpp"
         "${CASIMIR_SOURCE_DIRS}/core/context.cpp"
         "${CASIMIR_SOURCE_DIRS}/core/private-context.cpp"
+        "${CASIMIR_SOURCE_DIRS}/utilities/string.cpp"
+        "${CASIMIR_SOURCE_DIRS}/utilities/exception.cpp"
 )
 
 # Retrieve all the headers to the expected format

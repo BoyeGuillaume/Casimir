@@ -35,7 +35,7 @@ namespace Casimir {
         if(research.length() == 0) return beforePos;
         
         // Loop over the m_str from `beforePos` until it reach 0
-        for (cuint i = beforePos; i >= research.length(); --i) {
+        for (cuint i = beforePos + 1; i >= research.length(); --i) {
             // Check if the substring from `i - research.length() + 1` to `i`
             if(memcmp(c_str() + i - research.length(), research.c_str(), research.length()) == 0) {
                 return i - research.length();
@@ -46,13 +46,9 @@ namespace Casimir {
         return notFound();
     }
     
-    CASIMIR_EXPORT utilities::String literals::operator+(const utilities::String& a, const utilities::String& b) {
-        return utilities::String(a.m_str + b.m_str);
-    }
-    
     CASIMIR_EXPORT utilities::String utilities::String::substr(const cuint &start, const cuint &length) const {
 #ifdef CASIMIR_SAFE_CHECK
-      if(start + length >= this->length()) CASIMIR_THROW_EXCEPTION("IndexOutOfRange", "Cannot perform the given operation"
+      if(start + length > this->length()) CASIMIR_THROW_EXCEPTION("IndexOutOfRange", "Cannot perform the given operation"
                                                                                       "as the specified region isn't fully contained by the string");
 #endif
         return String(m_str.substr(start, length));
@@ -85,10 +81,10 @@ namespace Casimir {
         cuint sPosition = 0;
         while (sPosition < length()) {
             // Compute the next position
-            cuint nextPosition = std::min(findFirstOf(separator, sPosition), length() - 1);
+            cuint nextPosition = std::min(findFirstOf(separator, sPosition), length());
             String nStr = substr(sPosition, nextPosition - sPosition);
             if (nStr.length() != 0 || !discardEmptyStrings) {
-                sbStr.push_back();
+                sbStr.push_back(nStr);
             }
 
             // Increment the sPosition
@@ -111,7 +107,7 @@ namespace Casimir {
     CASIMIR_EXPORT bool utilities::String::endsWith(const utilities::String &str) const {
         if(str.length() > length()) return false;
         for(cint i = length() - 1; i >= length() - str.length(); --i) {
-            if(at(i) != str.at(i - length() + str.length() + 1))
+            if(at(i) != str.at(i - length() + str.length()))
                 return false;
         }
         return true;
@@ -119,7 +115,7 @@ namespace Casimir {
     
     CASIMIR_EXPORT utilities::String utilities::String::replaceAll(const utilities::String &str,
                                                                    const utilities::String &replacement) const {
-        return replacement.join(str.split(str, false));
+        return replacement.join(split(str, false));
     }
     
     CASIMIR_EXPORT utilities::String utilities::String::join(std::vector<String> list) const {
@@ -133,6 +129,10 @@ namespace Casimir {
             }
         }
         return output;
+    }
+
+    CASIMIR_EXPORT utilities::String literals::operator+(const utilities::String& a, const utilities::String& b) {
+        return utilities::String(a.str() + b.str());
     }
     
     
