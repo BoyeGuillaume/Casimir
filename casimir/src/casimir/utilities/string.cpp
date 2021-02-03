@@ -106,7 +106,7 @@ namespace Casimir {
     
     CASIMIR_EXPORT bool utilities::String::endsWith(const utilities::String &str) const {
         if(str.length() > length()) return false;
-        for(cint i = length() - 1; i >= length() - str.length(); --i) {
+        for(cint i = length() - 1; i >= (cint) length() - str.length(); --i) {
             if(at(i) != str.at(i - length() + str.length()))
                 return false;
         }

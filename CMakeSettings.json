@@ -20,6 +20,11 @@
           "name": "CASIMIR_TESTS",
           "value": "True",
           "type": "BOOL"
+        },
+        {
+          "name": "CASIMIR_BUILD_SHARED",
+          "value": "False",
+          "type": "BOOL"
         }
       ]
     }

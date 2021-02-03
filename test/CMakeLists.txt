@@ -5,7 +5,6 @@ set(BUILD_GMOCK            OFF CACHE BOOL "Builds the googlemock subproject")
 set(INSTALL_GTEST          OFF CACHE BOOL "Enable installation of googletest. (Projects embedding googletest may want to turn this OFF.)")
 set(gtest_force_shared_crt ON CACHE BOOL "Use shared (DLL) run-time lib even when Google Test is built as static lib.")
 
-set(CASIMIR_GTEST_WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add the googletest subdirectory (where all the magics happen)
 add_subdirectory(googletest)
