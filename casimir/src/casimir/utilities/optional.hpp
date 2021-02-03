@@ -72,7 +72,7 @@ namespace Casimir {
              */
             template<class... argsTypes>
             inline static Optional<T> of(argsTypes&&... args) {
-                return Optional<T>(std::make_shared<T>(args));
+                return Optional<T>(std::make_shared<T>(args...));
             }
 
             /**
