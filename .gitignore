@@ -43,7 +43,7 @@
 **/[Bb]uild
 **/[Oo]ut
 **/googletest
-[Tt]esting
+**/[Tt]esting
 
 # Configuration files
 casimir/src/casimir/configuration.hpp
