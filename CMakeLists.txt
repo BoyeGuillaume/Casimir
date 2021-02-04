@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
 # Options available for the Casimir project
-option(CASIMIR_TESTS             "Enable the Google tests" OFF)
-option(CASIMIR_BUILD_SHARED      "Enable to build the casimir library as a Dynamic Library (DLL)" OFF)
-option(CASIMIR_SAFE_CHECK        "Enable safe check (additional security assertion)." ON)
-option(CASIMIR_LITERAL_OPERATOR  "Enable the literal operator for Casimir library." OFF)
+option(CASIMIR_TESTS                "Enable the Google tests" OFF)
+option(CASIMIR_BUILD_SHARED         "Enable to build the casimir library as a Dynamic Library (DLL)" OFF)
+option(CASIMIR_SAFE_CHECK           "Enable safe check (additional security assertion)." ON)
+option(CASIMIR_LITERAL_OPERATOR     "Enable the literal operator for Casimir library." OFF)
+option(CASIMIR_BUILD_DOCUMENTATION  "Building generation of the documentation (Require Doxygen to be install.)" OFF)
 
 # Global variable
 set(CASIMIR_INSTALL_PATH     "${CMAKE_INSTALL_PREFIX}")
@@ -12,13 +13,12 @@ set(CASIMIR_INSTALL_BIN      "${CASIMIR_INSTALL_PATH}/bin")
 set(CASIMIR_INSTALL_LIBS     "${CASIMIR_INSTALL_PATH}/lib")
 set(CASIMIR_INSTALL_INCLUDE  "${CASIMIR_INSTALL_PATH}/include")
 set(CASIMIR_INSTALL_ARCHIVE  "${CASIMIR_INSTALL_PATH}/archive")
-
+set(CASIMIR_INSTALL_DOC      "${CASIMIR_INSTALL_PATH}/doc")
 
 # Setting up C++ standard
 set(CMAKE_CXX_STANDARD          17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS        OFF)
-
 
 # Retrieve the file by reading the file version
 include(cmake/version.cmake)
@@ -47,4 +47,9 @@ add_subdirectory(casimir)
 if(CASIMIR_TESTS)
 	enable_testing()
 	add_subdirectory(test)
+endif()
+
+# If the documentation build flag is HIGH
+if(CASIMIR_BUILD_DOCUMENTATION)
+	add_subdirectory(docs)
 endif()
