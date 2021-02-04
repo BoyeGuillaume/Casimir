@@ -133,8 +133,8 @@ namespace Casimir {
          */
         class UuidRandomGenerator {
         private:
-            std::uniform_int_distribution<uint64> m_distribution;
             std::mt19937_64 m_generator;
+            std::uniform_int_distribution<uint64> m_distribution;
 
         public:
             /**
