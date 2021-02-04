@@ -2,6 +2,7 @@
 #define CASIMIR_UUID_HPP_
 
 #include <functional>
+#include <random>
 
 #include "../casimir.hpp"
 #include "string.hpp"
@@ -15,7 +16,7 @@ namespace Casimir {
         /**
          * @brief The \link Uuid class defines an Universal Unique Identifier that can be compare serialize from and to a string...
          */
-        class Uuid {
+        class Uuid : public StringSerializable {
         private:
             ubyte m_rawData[16];
 
@@ -109,6 +110,87 @@ namespace Casimir {
             inline const uint64* lessSignificant() const {
                 return mostSignificant() + 1;
             }
+
+            /**
+             * @brief Return whether or not the current instance is the NIL instance
+             * @return whether or not the current uuid is NIL
+             */
+            inline bool isNIL() const {
+                return *mostSignificant() == 0 && *lessSignificant() == 0;
+            }
+
+            /**
+             * @brief Convert the current Uuid to a string
+             * @return a string that describe the current state of the Uuid object
+             */
+            inline String toString() const override {
+                return literals::operator+("Uuid(", literals::operator+(formattedString(), ")"));
+            }
+        };
+
+        /**
+         * @brief A random generator that generate a new Uuid every single time
+         */
+        class UuidRandomGenerator {
+        private:
+            std::uniform_int_distribution<uint64> m_distribution;
+            std::mt19937_64 m_generator;
+
+        public:
+            /**
+             * @brief seeded-constructor of UuidRandomGenerator. Two different instance of UuidRandomGenerator
+             * with the same `seed` will always shared the same behavior
+             * @param seed an uint64 that defines the `seed` of the pseudo random number generator system
+             */
+            inline explicit UuidRandomGenerator(uint64 seed)
+            : m_generator(seed), m_distribution(0, std::numeric_limits<uint64>::max()) {}
+
+            /**
+             * @brief default constructor of UuidRandomGenerator (with random seed)
+             */
+            inline UuidRandomGenerator() : UuidRandomGenerator(std::random_device()()) {}
+
+            /**
+             * @brief Generate the next Uuid using the random generation device
+             * @return The \link utilities::Uuid that has been create by the current instance
+             * @note The given Uuid is randomly generate and change every single times this function is called (really likely)
+             */
+            inline Uuid nextUuid() {
+                return Uuid(m_distribution(m_generator), m_distribution(m_generator));
+            }
+        };
+
+        /**
+         * @brief A counter Uuid generation that keep a count of each already generated Uuid and therefore assure
+         * the uniqueness of each resulting Uuid
+         */
+        class UuidCounterGenerator {
+        private:
+            uint64 m_lessSignificant, m_mostSignificant;
+
+        public:
+            /**
+             * @brief Constructor of UuidCounterGenerator with value
+             * @param lessSignificant the lessSignificant value where we start to generate the Uuid
+             * @param mostSignificant the mostSignificant value where we start to generate the Uuid
+             */
+            inline UuidCounterGenerator(uint64 lessSignificant, uint64 mostSignificant)
+            : m_lessSignificant(lessSignificant), m_mostSignificant(mostSignificant) {}
+
+            /**
+             * @brief Default constructor of UuidCounterGenerate that start the generation at 0
+             */
+            inline UuidCounterGenerator() : UuidCounterGenerator(0,0) {}
+
+            /**
+             * @brief Generate the next Uuid and increment the internal value that represent the current Uuid
+             * @return A unique new Uuid() generate from the current count in memory
+             */
+            inline Uuid nextUuid() {
+                // Slightly overkill since the condition is satisfied every 20 trillion call so....
+                if(++m_lessSignificant == 0) ++m_mostSignificant;
+                return Uuid(m_mostSignificant, m_lessSignificant);
+            }
         };
 
     }
@@ -145,6 +227,7 @@ namespace Casimir {
          * @return whether or not `a` is less than or equal to `b`
          */
         CASIMIR_EXPORT bool operator<=(const utilities::Uuid& a, const utilities::Uuid& b);
+
     }
 }
 

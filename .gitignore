@@ -44,7 +44,9 @@
 **/[Oo]ut
 **/googletest
 **/[Tt]esting
+**/CMakeSettings.json
 
-# Configuration files
+# Specific files to be ignored
 casimir/src/casimir/configuration.hpp
 docs/Doxyfile
+test/googletest/

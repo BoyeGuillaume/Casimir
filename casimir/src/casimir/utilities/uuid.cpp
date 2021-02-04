@@ -16,7 +16,7 @@ namespace Casimir {
 
     CASIMIR_EXPORT utilities::Uuid::Uuid(const uint64 &mostSignificant, const uint64 &lessSignificant) {
         memcpy(m_rawData, &mostSignificant, 8);
-        memcpy(m_rawData + 7, &lessSignificant, 8);
+        memcpy(m_rawData + 8, &lessSignificant, 8);
     }
 
     CASIMIR_EXPORT utilities::Optional<utilities::Uuid> utilities::Uuid::fromRawString(const utilities::String &rawString) {
