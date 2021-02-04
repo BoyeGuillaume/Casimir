@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 
 # Options available for the Casimir project
-option(CASIMIR_TESTS        "Enable the Google tests" OFF)
-option(CASIMIR_BUILD_SHARED "Enable to build the casimir library as a Dynamic Library (DLL)" OFF)
-option(CASIMIR_SAFE_CHECK   "Enable safe check (additional security assertion)." ON)
+option(CASIMIR_TESTS             "Enable the Google tests" OFF)
+option(CASIMIR_BUILD_SHARED      "Enable to build the casimir library as a Dynamic Library (DLL)" OFF)
+option(CASIMIR_SAFE_CHECK        "Enable safe check (additional security assertion)." ON)
+option(CASIMIR_LITERAL_OPERATOR  "Enable the literal operator for Casimir library." OFF)
 
 # Global variable
 set(CASIMIR_INSTALL_PATH     "${CMAKE_INSTALL_PREFIX}")

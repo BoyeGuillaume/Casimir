@@ -1,15 +1,16 @@
 #ifndef CASIMIR_CONFIGURATION_H_
 #define CASIMIR_CONFIGURATION_H_
 
-#define CASIMIR_VERSION_MAJOR 0
-#define CASIMIR_VERSION_MINOR 0
-#define CASIMIR_VERSION_PATCH 0
-#define CASIMIR_VERSION       0.0.0
-#define CASIMIR_HOMEPAGE      
-#define CASIMIR_DESCRIPTION   Optimise an computational graph for GPU/CPU
+#define CASIMIR_VERSION_MAJOR     0
+#define CASIMIR_VERSION_MINOR     0
+#define CASIMIR_VERSION_PATCH     0
+#define CASIMIR_VERSION           0.0.0
+#define CASIMIR_HOMEPAGE          
+#define CASIMIR_DESCRIPTION       Optimise an computational graph for GPU/CPU
 
 /* #undef CASIMIR_BUILD_SHARED */
-#define CASIMIR_SAFE_CHECK   true
+#define CASIMIR_SAFE_CHECK        true
+#define CASIMIR_LITERAL_OPERATOR  ON
 
 #ifndef CASIMIR_SAFE_CHECK
 #if defined(_MSC_VER)

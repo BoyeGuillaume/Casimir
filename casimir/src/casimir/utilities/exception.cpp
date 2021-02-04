@@ -11,8 +11,8 @@ using namespace literals;
 
     CASIMIR_EXPORT utilities::Exception::Exception(const String &error, const String &cause, const String &file,
                                                const cuint &line)
-        : m_str("[" + file + " @ " + String::toString((cint)line) + "]:\n\t Error {" + error + "} : " + cause)
+        : m_str("[" + file + " @ " + String::toString((cint)line) + "]:\n\t Error {" + error + "} : " + cause),
+        std::exception(error.c_str())
     {}
-    
     
 }

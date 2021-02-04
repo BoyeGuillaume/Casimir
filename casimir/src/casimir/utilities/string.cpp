@@ -115,13 +115,13 @@ namespace Casimir {
     
     CASIMIR_EXPORT utilities::String utilities::String::replaceAll(const utilities::String &str,
                                                                    const utilities::String &replacement) const {
-        return replacement.join(split(str, false));
+        return replacement.join(split(str, false), false);
     }
     
-    CASIMIR_EXPORT utilities::String utilities::String::join(std::vector<String> list) const {
+    CASIMIR_EXPORT utilities::String utilities::String::join(std::vector<String> list, bool discardEmptyString) const {
         String output;
         for (cuint i = 0; i < list.size(); ++i) {
-            if(i == 0) {
+            if(i == 0 || (list[i] == "" && discardEmptyString)) {
                 output += list[i];
             }
             else {
