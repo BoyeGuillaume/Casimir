@@ -114,9 +114,36 @@ namespace Casimir {
     }
 
     namespace literals {
+        /**
+         * @brief Operator greater between two Uuid
+         * @param a the first Uuid to be compared
+         * @param b the second Uuid to be compared
+         * @return whether or not `a` is strictly greater than `b`
+         */
         CASIMIR_EXPORT bool operator>(const utilities::Uuid& a, const utilities::Uuid& b);
+
+        /**
+         * @brief Operator less between two Uuid
+         * @param a the first Uuid to be compared
+         * @param b the second Uuid to be compared
+         * @return whether or not `a` is strictly less than `b`
+         */
         CASIMIR_EXPORT bool operator<(const utilities::Uuid& a, const utilities::Uuid& b);
+
+        /**
+         * @brief Operator greater or equal between two Uuid
+         * @param a the first Uuid to be compared
+         * @param b the second Uuid to be compared
+         * @return whether or not `a` is greater than or equal to `b`
+         */
         CASIMIR_EXPORT bool operator>=(const utilities::Uuid& a, const utilities::Uuid& b);
+
+        /**
+         * @brief Operator less or equal between two Uuid
+         * @param a the first Uuid to be compared
+         * @param b the second Uuid to be compared
+         * @return whether or not `a` is less than or equal to `b`
+         */
         CASIMIR_EXPORT bool operator<=(const utilities::Uuid& a, const utilities::Uuid& b);
     }
 }
