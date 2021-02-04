@@ -1,7 +1,7 @@
 #ifndef CASIMIR_UUID_HPP_
 #define CASIMIR_UUID_HPP_
 
-#include <hash_map>
+#include <functional>
 
 #include "../casimir.hpp"
 #include "string.hpp"
