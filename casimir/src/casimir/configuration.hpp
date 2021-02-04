@@ -9,7 +9,7 @@
 #define CASIMIR_DESCRIPTION       Optimise an computational graph for GPU/CPU
 
 /* #undef CASIMIR_BUILD_SHARED */
-#define CASIMIR_SAFE_CHECK        ON
+#define CASIMIR_SAFE_CHECK        true
 /* #undef CASIMIR_LITERAL_OPERATOR */
 
 #ifndef CASIMIR_SAFE_CHECK

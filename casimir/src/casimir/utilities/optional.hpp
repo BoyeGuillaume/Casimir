@@ -21,7 +21,7 @@ namespace Casimir {
         template<typename T>
         class Optional {
         private:
-            typedef std::bool_constant<std::is_move_constructible<T>::value && std::is_copy_constructible<T>::value> 
+            typedef std::bool_constant<std::is_move_constructible<T>::value && std::is_copy_constructible<T>::value>
                 _isTCopyMove;
 
             std::shared_ptr<T> m_ref;
@@ -131,7 +131,7 @@ namespace Casimir {
              * @return the data hold by the optional
              */
             template<typename U = T, typename = std::enable_if_t<_isTCopyMove::value, bool>>
-                inline T get() const {
+            inline T get() const {
                 return *getPtr();
             }
 
@@ -197,6 +197,17 @@ namespace Casimir {
                 return isPresent() ?
                     Optional<U>::of(mapper(get())) :
                     Optional<U>::empty();
+            }
+
+            /**
+             * @brief Compute a `consumer` if the value is present in the optional
+             * @tparam U the type of the current instance of Optional (same as T, to be ignored)
+             * @param consumer the function that take a `T` as input to be called if the value is present in the Optional
+             */
+            template<typename U = T, typename = std::enable_if_t<_isTCopyMove::value &&
+                 std::is_move_constructible<U>::value && std::is_copy_constructible<U>::value, bool>>
+            void computeIfPresent(std::function<void(T)> consumer) {
+                if(isPresent()) consumer(get());
             }
         };
 

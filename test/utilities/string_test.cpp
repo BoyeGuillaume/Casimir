@@ -63,6 +63,7 @@ TEST(String, StartAndEndWith) {
 }
 
 TEST(String, Find) {
+	EXPECT_THROW(String("Test").findLastOf("e", 100), Exception);
 	EXPECT_EQ(String("I love having pancakes").findFirstOf("love"), 2);
 	EXPECT_EQ(String("I AI IA IA").findFirstOf("IA"), 5);
 	EXPECT_EQ(String("I AI IA IA").findFirstOf("IA", 5), 5);
@@ -78,4 +79,28 @@ TEST(String, Find) {
 TEST(String, Replacement) {
 	EXPECT_TRUE(String("I don't like this because thisthis th is is this this is not").replaceAll("this", "@")
 		== String("I don't like @ because @@ th is is @ @ is not"));
+}
+
+TEST(String, LowerUpperCase) {
+	EXPECT_TRUE(String("Hello world and welcome 654").toUpperCase() == String("HELLO WORLD AND WELCOME 654"));
+	EXPECT_TRUE(String("THIS is NOT very 5456").toLowerCase() == String("this is not very 5456"));
+}
+
+TEST(String, HexConvertion) {
+	EXPECT_TRUE(String("\0\0\0\0", 4).encodeToHex() == String("00000000"));
+	EXPECT_TRUE(String("Hello world!").encodeToHex() == String("48656c6c6f20776f726c6421"));
+	EXPECT_TRUE(String("48656C6c6f20776F726C6421").decodeFromHex() == String("Hello world!"));
+	EXPECT_TRUE(String("00000000").decodeFromHex() == String("\0\0\0\0", 4));
+	EXPECT_TRUE(String("e454fc12AL").decodeFromHex().isEmpty());
+}
+
+TEST(String, Insertion) {
+	EXPECT_THROW(String("A").insert(2, ""), Exception);
+	String a = "Test";
+	a.insert(0, "Hllo ");
+	EXPECT_TRUE(a == "Hllo Test");
+	a.insert(1, "e");
+	EXPECT_TRUE(a == "Hello Test");
+	a.insert(10, "!");
+	EXPECT_TRUE(a == "Hello Test!");
 }

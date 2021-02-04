@@ -4,8 +4,8 @@
 #include <exception>
 
 #include "../casimir.hpp"
-#include "string.hpp"
 #include "string_serializable.hpp"
+#include "string.hpp"
 
 #define CASIMIR_THROW_EXCEPTION(error, cause) throw Exception(error,   \
                                                         cause,   \
@@ -14,6 +14,8 @@
 
 namespace Casimir {
     namespace utilities {
+
+        class String;
 
         /**
          * @brief \link Exception is the exception class used by the whole Casimir project

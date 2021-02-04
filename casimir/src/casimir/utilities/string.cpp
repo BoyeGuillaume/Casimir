@@ -48,24 +48,30 @@ namespace Casimir {
     
     CASIMIR_EXPORT utilities::String utilities::String::substr(const cuint &start, const cuint &length) const {
 #ifdef CASIMIR_SAFE_CHECK
-      if(start + length > this->length()) CASIMIR_THROW_EXCEPTION("IndexOutOfRange", "Cannot perform the given operation"
-                                                                                      "as the specified region isn't fully contained by the string");
+      if(start + length > this->length()) {
+          CASIMIR_THROW_EXCEPTION("IndexOutOfRange", "Cannot perform the given operation"
+                                                     "as the specified region isn't fully contained by the string");
+      }
 #endif
         return String(m_str.substr(start, length));
     }
     
     CASIMIR_EXPORT char &utilities::String::at(const cuint &pos) {
 #ifdef CASIMIR_SAFE_CHECK
-        if(pos >= length()) CASIMIR_THROW_EXCEPTION("IndexOutOfRange", "Cannot find the given position as it"
-                                                                       "doesn't correspond to any existing character");
+        if(pos >= length()) {
+            CASIMIR_THROW_EXCEPTION("IndexOutOfRange", "Cannot find the given position as it"
+                                                       "doesn't correspond to any existing character");
+        }
 #endif
         return m_str.at(pos);
     }
     
     CASIMIR_EXPORT char utilities::String::at(const cuint &pos) const {
 #ifdef CASIMIR_SAFE_CHECK
-        if(pos >= length()) CASIMIR_THROW_EXCEPTION("IndexOutOfRange", "Cannot find the given position as it"
-                                                                       "doesn't correspond to any existing character");
+        if(pos >= length()) {
+            CASIMIR_THROW_EXCEPTION("IndexOutOfRange", "Cannot find the given position as it"
+                                                       "doesn't correspond to any existing character");
+        }
 #endif
         return m_str.at(pos);
     }
@@ -129,6 +135,91 @@ namespace Casimir {
             }
         }
         return output;
+    }
+
+    CASIMIR_EXPORT utilities::String utilities::String::encodeToHex() const {
+        // Tools only used in this function that represent the hexadecimal alphabet
+        static constexpr char hexAlphabet[] = {
+                0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66
+        };
+
+        // Loop other each character of the string and replace each of the char by the hex correspondence
+        // We already know the output length to be twice of the input length
+        String output('\0', 2 * length());
+        for(cuint i = 0; i < length(); ++i) {
+            // Retrieve the character at position `i`
+            const char value = at(i);
+
+            // Convert the string to hexadecimal
+            output[2 * i] = hexAlphabet[((value >> 4) & 0x0F)];
+            output[2 * i + 1] = hexAlphabet[(value & 0x0F)];
+        }
+
+        // Return the resulting String
+        return output;
+    }
+
+    CASIMIR_EXPORT utilities::String utilities::String::decodeFromHex() const {
+        // We already know that the result will be half of the size of the current string
+        if(length() % 2 != 0) {
+            return String(); // The string isn't a valid string
+        }
+
+        // Otherwise allocate the result
+        String result('\0', length() / 2);
+
+        // Loop other each character of the resulting String
+        for(cuint i = 0; i < length() / 2; ++i) {
+            // Process separately v0 and v1
+            const char _v0 = at(2 * i);
+            char v0;
+            if(_v0 >= 'a' && _v0 <= 'f') v0 = _v0 - 'a' + 10;
+            else if(_v0 >= 'A' && _v0 <= 'F') v0 = _v0 - 'A' + 10;
+            else if(_v0 >= '0' && _v0 <= '9') v0 = _v0 - '0';
+            else return String(); // The current character isn't a valid hexadecimal character
+
+            const char _v1 = at(2 * i + 1);
+            char v1;
+            if(_v1 >= 'a' && _v1 <= 'f') v1 = _v1 - 'a' + 10;
+            else if(_v1 >= 'A' && _v1 <= 'F') v1 = _v1 - 'A' + 10;
+            else if(_v1 >= '0' && _v1 <= '9') v1 = _v1 - '0';
+            else return String(); // The current character isn't a valid hexadecimal character
+
+            // Simply set the resulting byte
+            result[i] = v0 << 4 | v1;
+        }
+
+        // Simply return the result
+        return result;
+    }
+
+    CASIMIR_EXPORT utilities::String utilities::String::toUpperCase() const {
+        String result(*this);
+        for(cuint i = 0; i < length(); ++i) {
+            char& value = result[i];
+            if(value >= 'a' && value <= 'z') value -= 0x20;
+        }
+        return result;
+    }
+
+    CASIMIR_EXPORT utilities::String utilities::String::toLowerCase() const {
+        String result(*this);
+        for(cuint i = 0; i < length(); ++i) {
+            char& value = result[i];
+            if(value >= 'A' && value <= 'Z') value += 0x20;
+        }
+        return result;
+    }
+
+    CASIMIR_EXPORT void utilities::String::insert(const cuint &pos, const utilities::String &str) {
+#ifdef CASIMIR_SAFE_CHECK
+        if(pos > length()) {
+            CASIMIR_THROW_EXCEPTION("IndexOutOfRange", "The specified index to the index function isn't a valid index");
+        }
+#endif
+
+        // Insert the str into the current instance
+        m_str.insert(pos, str.c_str(), str.length());
     }
 
     CASIMIR_EXPORT utilities::String literals::operator+(const utilities::String& a, const utilities::String& b) {

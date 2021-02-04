@@ -167,7 +167,7 @@ namespace Casimir {
              * @param str The second String we are comparing to
              * @return Whether or not the two string are equivalent
              */
-            inline bool operator==(const String& str) {
+            inline bool operator==(const String& str) const {
                 return str.m_str == m_str;
             }
 
@@ -176,7 +176,7 @@ namespace Casimir {
              * @param str The second String we are comparing to
              * @return Whether or not the two string are different
              */
-            inline bool operator!=(const String& str) {
+            inline bool operator!=(const String& str) const {
                 return str.m_str != m_str;
             }
 
@@ -332,6 +332,49 @@ namespace Casimir {
              * @return The resulting String
              */
             CASIMIR_EXPORT String replaceAll(const String& str, const String& replacement) const;
+
+            /**
+             * @brief Convert the current String instance to hexadecimal
+             * @return An hexadecimal representation of the current string encapsulate in another String
+             */
+            CASIMIR_EXPORT String encodeToHex() const;
+
+            /**
+             * @brief Convert the current String instance from hexadecimal back to the origin format
+             * @return The resulting decoding String if possible (otherwise return empty string)
+             * @note We cannot return Optional in here because this would make an loop in the header that cannot
+             * be solved so here we are
+             */
+            CASIMIR_EXPORT String decodeFromHex() const;
+
+            /**
+             * @brief Return a copy of this string where each character (standard in ASCII) is replace by a uppercase
+             * version of itself if defined
+             * @return Return the result
+             */
+            CASIMIR_EXPORT String toUpperCase() const;
+
+            /**
+             * @brief Return a copy of this string where each character (standard in ASCII) is replace by a lowercase
+             * version of itself if defined
+             * @return Return the result
+             */
+            CASIMIR_EXPORT String toLowerCase() const;
+
+            /**
+             * @brief Insert a `str` to a given position in the string
+             * @param pos the position where the string is inserted
+             * @param str the string to insert to the current instance
+             */
+            CASIMIR_EXPORT void insert(const cuint& pos, const String& str);
+
+            /**
+             * @brief Return whether or not the current String is the empty string
+             * @return Whether or not the current String is empty (equal to `""`)
+             */
+            inline bool isEmpty() const {
+                return (*this) == "";
+            }
         };
 
     }
