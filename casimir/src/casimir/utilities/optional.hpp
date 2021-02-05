@@ -59,7 +59,7 @@ namespace Casimir {
              * @param data Raw data used to create the optional
              * @return The newly created instance of Optional containing the given data
              */
-            template<typename U = T, typename = std::enable_if_t<_isTCopyMove::value, bool>>
+            // template<typename U = T, typename = std::enable_if_t<_isTCopyMove::value, bool>>
             inline static Optional<T> of(T data) {
                 return Optional<T>(std::shared_ptr<T>(new T(data)));
             }
@@ -130,7 +130,7 @@ namespace Casimir {
              * @tparam U the type of the create Optional (same as T)
              * @return the data hold by the optional
              */
-            template<typename U = T, typename = std::enable_if_t<_isTCopyMove::value, bool>>
+            // template<typename U = T, typename = std::enable_if_t<_isTCopyMove::value, bool>>
             inline T get() const {
                 return *getPtr();
             }
@@ -141,7 +141,7 @@ namespace Casimir {
              * @param replacement the replacement value to be used if the optional is empty
              * @return the value hold by the optional if present or else the replacement value
              */
-            template<typename U = T, typename = std::enable_if_t<_isTCopyMove::value, bool>>
+            // template<typename U = T, typename = std::enable_if_t<_isTCopyMove::value, bool>>
             inline T orElse(T replacement) const {
                 return *orElsePtr(&replacement);
             }
@@ -191,8 +191,9 @@ namespace Casimir {
              * @return new instance of Optional that is empty if the current \link Optional<T> is empty
              * otherwise the mapped version of the current data
              */
-            template<typename U, typename = std::enable_if_t<_isTCopyMove::value &&
-                std::is_move_constructible<U>::value && std::is_copy_constructible<U>::value, bool>>
+            //template<typename U, typename = std::enable_if_t<_isTCopyMove::value &&
+            //    std::is_move_constructible<U>::value && std::is_copy_constructible<U>::value, bool>>
+            template<typename U>
             Optional<U> map(std::function<U(T)> mapper) {
                 return isPresent() ?
                     Optional<U>::of(mapper(get())) :
@@ -204,8 +205,8 @@ namespace Casimir {
              * @tparam U the type of the current instance of Optional (same as T, to be ignored)
              * @param consumer the function that take a `T` as input to be called if the value is present in the Optional
              */
-            template<typename U = T, typename = std::enable_if_t<_isTCopyMove::value &&
-                 std::is_move_constructible<U>::value && std::is_copy_constructible<U>::value, bool>>
+            // template<typename U = T, typename = std::enable_if_t<_isTCopyMove::value &&
+            //     std::is_move_constructible<U>::value && std::is_copy_constructible<U>::value, bool>>
             void computeIfPresent(std::function<void(T)> consumer) {
                 if(isPresent()) consumer(get());
             }

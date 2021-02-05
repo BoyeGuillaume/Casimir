@@ -67,5 +67,10 @@ namespace Casimir {
         return memcmp(a.rawData(), b.rawData(), 16) <= 0;
     }
 
-
 };
+
+CASIMIR_EXPORT std::size_t std::hash<Casimir::utilities::Uuid>::operator()(const Casimir::utilities::Uuid &uuid) const {
+    return std::hash<Casimir::uint64>()(*uuid.mostSignificant()) ^
+           std::hash<Casimir::uint64>()(*uuid.lessSignificant());
+}
+

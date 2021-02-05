@@ -4,6 +4,15 @@
 #include "configuration.hpp"
 #include <type_traits>
 
+#define CASIMIR_DISABLE_COPY(name)      name (const name&) = delete; \
+                                        name& operator=(const name&) = delete;
+
+#define CASIMIR_DISABLE_MOVE(name)      name (name&&) = delete; \
+                                        name& operator=(name&&) = delete;
+
+#define CASIMIR_DISABLE_COPY_MOVE(name) CASIMIR_DISABLE_COPY(name) \
+                                        CASIMIR_DISABLE_MOVE(name)
+
 namespace Casimir {
 
     namespace core {}

@@ -237,10 +237,7 @@ namespace std {
      */
     template<>
     struct hash<Casimir::utilities::Uuid> {
-        std::size_t operator()(const Casimir::utilities::Uuid& uuid) const {
-            return std::hash<Casimir::uint64>()(*uuid.mostSignificant()) ^
-                    std::hash<Casimir::uint64>()(*uuid.lessSignificant());
-        }
+        CASIMIR_EXPORT std::size_t operator()(const Casimir::utilities::Uuid& uuid) const;
     };
 }
 
