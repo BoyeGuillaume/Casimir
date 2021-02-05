@@ -11,7 +11,5 @@ using namespace literals;
 
 
 int main(int, char**) {
-
-	t1.join();
-
+	return 0;
 }
