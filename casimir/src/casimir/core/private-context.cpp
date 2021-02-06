@@ -86,7 +86,7 @@ namespace Casimir {
     }
 
     CASIMIR_EXPORT utilities::Logger instantiateLogger(const String& filepath) {
-        std::shared_ptr<FileLogger> fileLogger;
+        std::shared_ptr<FileLogger> fileLogger = nullptr;
         if(!filepath.isEmpty()) {
             fileLogger = std::make_shared<FileLogger>(filepath);
         }
