@@ -3,8 +3,8 @@
 
 #define CASIMIR_VERSION_MAJOR     0
 #define CASIMIR_VERSION_MINOR     0
-#define CASIMIR_VERSION_PATCH     0
-#define CASIMIR_VERSION           "0.0.0"
+#define CASIMIR_VERSION_PATCH     1
+#define CASIMIR_VERSION           "0.0.1"
 #define CASIMIR_HOMEPAGE          ""
 #define CASIMIR_DESCRIPTION       "Optimise an computational graph for GPU/CPU"
 
