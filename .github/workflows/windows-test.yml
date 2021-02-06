@@ -1,0 +1,31 @@
+name: Windows
+
+on: [push]
+
+jobs:
+  test:
+    name: Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: checkout submodule
+        run: git submodule update --init --recursive
+      - name: Environment script
+        shell: cmake -P {0}
+        run: |
+          execute_process(
+            COMMAND "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat" && set
+            OUTPUT_FILE environment_script_output.txt
+          )
+          file(STRINGS environment_script_output.txt output_lines)
+          foreach(line IN LISTS output_lines)
+            if (line MATCHES "^([a-zA-Z0-9_-]+)=(.*)$")
+              set(ENV{${CMAKE_MATCH_1} } "${CMAKE_MATCH_2}")
+            endif()
+          endforeach()
+      - name: Configure
+        run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DCASIMIR_TESTS=ON ..
+      - name: Build
+        run: cd build && cmake --build . --config Release
+      - name: Run test
+        run: cd build && ctest -C Release --verbose
