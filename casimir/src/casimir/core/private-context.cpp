@@ -15,8 +15,12 @@ namespace Casimir {
         time(&timePoint);
 
         // Convert it to tm structure
+#ifdef _WIN32
         tm* now = new tm();
         gmtime_s(now, &timePoint);
+#else
+        tm* now = gmtime(&timePoint);
+#endif
 
         // Retrieve the buffer
         char buffer[250];

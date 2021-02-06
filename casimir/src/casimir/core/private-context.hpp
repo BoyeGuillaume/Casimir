@@ -44,6 +44,7 @@ namespace Casimir {
 
     /**
      * @brief Private function that return a String that represent the current time formatted for log
+     * @warning This function may no be thread-safe due to the usage of gmtime and gmtime_s (depending on the platform)
      * @return A utilities::String that represent the current formatted time
      */
     CASIMIR_EXPORT utilities::String formattedTime();
