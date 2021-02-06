@@ -12,6 +12,5 @@ using namespace literals;
 
 
 int main(int, char**) {
-	/*CasimirContext ctx = createContext("./casimir.log");
-	releaseContext(ctx);*/
+
 }
