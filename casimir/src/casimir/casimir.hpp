@@ -20,7 +20,6 @@ namespace Casimir {
     namespace utilities {}
     namespace framework {}
     namespace literals {}
-    namespace literals {}
 
     // Create all the types of fixed size used by the API
     typedef unsigned char           ubyte;

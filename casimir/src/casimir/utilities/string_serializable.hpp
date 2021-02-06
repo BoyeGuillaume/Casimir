@@ -3,9 +3,7 @@
 
 #include "../casimir.hpp"
 
-namespace Casimir {
-
-    namespace utilities {
+namespace Casimir::utilities {
 
         class String;
 
@@ -21,8 +19,6 @@ namespace Casimir {
             virtual String toString() const = 0;
         };
 
-    };
-
-};
+    }
 
 #endif

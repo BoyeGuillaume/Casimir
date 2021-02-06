@@ -17,6 +17,8 @@ set(CASIMIR_EXPORTED_HEADER
         "casimir/utilities/logger.hpp"
         "casimir/utilities/optional.hpp"
         "casimir/utilities/cmutex.hpp"
+        "casimir/framework/contextual_object.hpp"
+        "casimir/framework/datatype.hpp"
 )
 
 # List all of the other header used by the project but not exported by the library
@@ -36,6 +38,8 @@ set(CASIMIR_SOURCE_FILES
         "${CASIMIR_SOURCE_DIRS}/utilities/uuid.cpp"
         "${CASIMIR_SOURCE_DIRS}/utilities/logger.cpp"
         "${CASIMIR_SOURCE_DIRS}/utilities/cmutex.cpp"
+        "${CASIMIR_SOURCE_DIRS}/framework/contextual_object.cpp"
+        "${CASIMIR_SOURCE_DIRS}/framework/datatype.cpp"
 )
 
 # Retrieve all the headers to the expected format
