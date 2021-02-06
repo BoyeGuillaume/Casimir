@@ -14,7 +14,7 @@ namespace Casimir {
     namespace utilities {
 
         /**
-         * @brief The \link Uuid class defines an Universal Unique Identifier that can be compare serialize from and to a string...
+         * @brief The Uuid class defines an Universal Unique Identifier that can be compare serialize from and to a string...
          */
         class Uuid : public StringSerializable {
         private:
@@ -41,24 +41,24 @@ namespace Casimir {
             CASIMIR_EXPORT Uuid(const uint64& mostSignificant, const uint64& lessSignificant);
 
             /**
-             * @brief Construct a new \link utilities::Uuid from a \link utilities::String containing the raw data
+             * @brief Construct a new utilities::Uuid from a utilities::String containing the raw data
              * @param rawString the raw data string used to construct the Uuid
-             * @return An Optional \link utilities::Uuid result of the raw data. If the rawString's length isn't equal to 16
+             * @return An Optional utilities::Uuid result of the raw data. If the rawString's length isn't equal to 16
              * it will considered the string as invalid and will return an empty Optional
              */
             CASIMIR_EXPORT static Optional<Uuid> fromRawString(const String& rawString);
 
             /**
-             * @brief Construct a new Uuid from a parsed \link utilities::String
+             * @brief Construct a new Uuid from a parsed utilities::String
              * @param parsedString the parsed String used to create the Uuid
-             * @return An Optional Uuid that return the new \link utilities::Uuid if the `parsedString` is valid otherwise will return
-             * an empty \link utilities::Optional
+             * @return An Optional Uuid that return the new utilities::Uuid if the `parsedString` is valid otherwise will return
+             * an empty utilities::Optional
              */
             CASIMIR_EXPORT static Optional<Uuid> fromParsedString(const String& parsedString);
 
             /**
              * @brief Return a formatted version of the Uuid of format {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}
-             * @return the resulting format as a \link utilities::String
+             * @return the resulting format as a utilities::String
              */
             CASIMIR_EXPORT String formattedString() const;
 
@@ -152,7 +152,7 @@ namespace Casimir {
 
             /**
              * @brief Generate the next Uuid using the random generation device
-             * @return The \link utilities::Uuid that has been create by the current instance
+             * @return The utilities::Uuid that has been create by the current instance
              * @note The given Uuid is randomly generate and change every single times this function is called (really likely)
              */
             inline Uuid nextUuid() {

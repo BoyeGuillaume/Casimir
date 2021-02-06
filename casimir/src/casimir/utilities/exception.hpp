@@ -18,7 +18,7 @@ namespace Casimir {
         class String;
 
         /**
-         * @brief \link Exception is the exception class used by the whole Casimir project
+         * @brief This class is the exception class used by the whole Casimir project
          */
         class Exception : public std::exception, public StringSerializable {
         private:
@@ -35,7 +35,7 @@ namespace Casimir {
 
             /**
              * @brief Constructor of the exception class
-             * @param error Small string without space that hold the error name
+             * @param error Small \see String without space that hold the error name
              * @param cause The cause of the error
              * @param file The file where the error occurred
              * @param line The line where the exception is thrown
@@ -43,15 +43,15 @@ namespace Casimir {
             CASIMIR_EXPORT Exception(const String& error, const String& cause, const String& file, const cuint& line);
 
             /**
-             * @brief Convert the exception to string
-             * @return A formatted string that describe the exception
+             * @brief Convert the \see Exception to \see String
+             * @return A formatted \see String that describe the \see sException
              */
             inline String toString() const override {
                 return m_str;
             }
 
             /**
-             * @brief Convert the exception to a C string
+             * @brief Convert the \see Exception to a C string
              * @return A formatted C string
              */
             const char * what() const noexcept override {

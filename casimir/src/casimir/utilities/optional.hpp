@@ -35,7 +35,7 @@ namespace Casimir {
             Optional() : m_ref(nullptr) {}
 
             /**
-             * @brief Create a new instance of Optional based on an \link std::shared_ptr<T>
+             * @brief Create a new instance of Optional based on an std::shared_ptr<T>
              * @param data the data to be used to construct the instance of Optional<>
              * @return The newly created instance of Optional containing the given data
              */
@@ -76,35 +76,35 @@ namespace Casimir {
             }
 
             /**
-             * @brief Return a new instance of \link Optional<T> that contain no data
-             * @return Empty instance of \link Optional<T>
+             * @brief Return a new instance of Optional<T> that contain no data
+             * @return Empty instance of Optional<T>
              */
             inline static Optional<T> empty() {
                 return Optional<T>();
             }
 
             /**
-             * @brief whether or not the current instance of \link Optional<T> hold any value
-             * @return whether or not a value is present in the current \link Optional<T>
+             * @brief whether or not the current instance of Optional<T> hold any value
+             * @return whether or not a value is present in the current Optional<T>
              */
             inline bool isPresent() const {
                 return (bool) m_ref;
             }
 
             /**
-             * @brief whether or not the current instance of \link Optional<T> hold no value
-             * @return whether or not the current \link Optional<T> is empty
+             * @brief whether or not the current instance of Optional<T> hold no value
+             * @return whether or not the current Optional<T> is empty
              */
             inline bool isEmpty() const {
                 return ! ((bool) m_ref);
             }
 
             /**
-             * @brief Get the pointer hold by the instance of \link Optional<T>
-             * @throw \link utilities::Exception if no value is present in the current Optional
+             * @brief Get the pointer hold by the instance of Optional<T>
+             * @throw utilities::Exception if no value is present in the current Optional
              * @return A pointer to the data hold by the current optional.
              * @note The given pointer is safe to use as long as the Optional is allocate. In the case where
-             * the \link Optional<T> has been instantiate using directly a pointer the pointer is safe-to-use even after.
+             * the Optional<T> has been instantiate using directly a pointer the pointer is safe-to-use even after.
              */
             inline T* getPtr() const {
 #ifdef CASIMIR_SAFE_CHECK
@@ -125,8 +125,8 @@ namespace Casimir {
             }
 
             /**
-             * @brief Get the date hold by the instance of \link Optional<T>
-             * @throw \link utilities::Exception if no value is present in the current Optional
+             * @brief Get the date hold by the instance of Optional<T>
+             * @throw utilities::Exception if no value is present in the current Optional
              * @tparam U the type of the create Optional (same as T)
              * @return the data hold by the optional
              */
@@ -147,19 +147,19 @@ namespace Casimir {
             }
 
             /**
-             * @brief Same as \link utilities::Optional<T>::getPtr
-             * @throw \link utilities::Exception if no value is present in the current Optional
+             * @brief Same as utilities::Optional<T>::getPtr
+             * @throw utilities::Exception if no value is present in the current Optional
              * @return A pointer to the data hold by the current optional.
              * @note The given pointer is safe to use as long as the Optional is allocate. In the case where
-             * the \link Optional<T> has been instantiate using directly a pointer the pointer is safe-to-use even after.
+             * the Optional<T> has been instantiate using directly a pointer the pointer is safe-to-use even after.
              */
             inline T* operator->() const {
                 return getPtr();
             }
 
             /**
-             * @brief Return a reference of the data hold by the \link utilities::Optional<T>
-             * @throw \link utilities::Exception if no value is present in the current Optional
+             * @brief Return a reference of the data hold by the utilities::Optional<T>
+             * @throw utilities::Exception if no value is present in the current Optional
              * @return A reference to the data hold by the optional
              */
             inline T& operator*() const {
@@ -185,10 +185,10 @@ namespace Casimir {
             }
 
             /**
-             * @brief map the \link Optional<T> to another \link Optional<T> of another type
+             * @brief map the Optional<T> to another Optional<T> of another type
              * @tparam U the destination type (type of the Optional after the mapping)
              * @param mapper Function used to map from type T to type U
-             * @return new instance of Optional that is empty if the current \link Optional<T> is empty
+             * @return new instance of Optional that is empty if the current Optional<T> is empty
              * otherwise the mapped version of the current data
              */
             //template<typename U, typename = std::enable_if_t<_isTCopyMove::value &&

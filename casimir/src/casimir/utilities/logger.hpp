@@ -6,6 +6,7 @@
 #include <memory>
 #include <type_traits>
 #include <functional>
+#include <fstream>
 
 #include "../casimir.hpp"
 #include "string.hpp"
@@ -27,10 +28,15 @@ namespace Casimir {
         class AbstractLoggerChannel {
         public:
             /**
-             * @brief Handle a \link utilities::String `msg`
+             * @brief Handle a utilities::String `msg`
              * @param msg the message to be handled by the LoggerChannel.
              */
             virtual void log(const String& msg) = 0;
+
+            /**
+             * @brief Default virtual destructor for the AbstractLoggerChannel
+             */
+            CASIMIR_EXPORT virtual ~AbstractLoggerChannel();
         };
 
         /**
@@ -41,15 +47,18 @@ namespace Casimir {
             CASIMIR_DISABLE_COPY(LoggerChannelAdapter)
             friend class __Logger;
         private:
+            std::function<String(const String&)> m_parser;
             std::vector<std::shared_ptr<AbstractLoggerChannel>> m_loggerChannel;
             String m_msg;
 
             /**
              * @brief Private internal constructor of LoggerChannelAdapter
-             * @param loggerChannel The loggerChannel linked to the current adapter
+             * @param parser the function used to parse the resulting log
+             * @param loggerChannel A list of all the logger channel linked to the current channel
              */
-            inline explicit LoggerChannelAdapter(std::vector<std::shared_ptr<AbstractLoggerChannel>> loggerChannel)
-            : m_loggerChannel(std::move(loggerChannel)), m_msg("") {}
+            inline explicit LoggerChannelAdapter(std::function<String(const String&)> parser,
+                                                 std::vector<std::shared_ptr<AbstractLoggerChannel>> loggerChannel)
+            : m_parser(std::move(parser)), m_loggerChannel(std::move(loggerChannel)), m_msg("") {}
         public:
             /**
              * @brief Destructor of the LoggerChannelAdapter. Notice that it is during the destruction operation that
@@ -109,7 +118,7 @@ namespace Casimir {
 
             /**
              * @brief Append the value of a pointer to the end of the current logging message
-             * @param value the pointer to be displayed. Notice that the display is in hexadecimal
+             * @param ptr the pointer to be displayed. Notice that the display is in hexadecimal
              * @return A self-reference
              */
             inline LoggerChannelAdapter& operator<<(const void* ptr) {
@@ -144,14 +153,24 @@ namespace Casimir {
          */
         class Logger {
             friend class LoggerBuilder;
+            friend class __Logger;
         private:
             std::shared_ptr<__Logger> m_handle;
+
+            /**
+             * @brief Internal storage class that store a list of channels logger as long as a
+             * parsing function for each channel.
+             */
+            struct __LoggerChannelStorage {
+                std::vector<std::shared_ptr<AbstractLoggerChannel>> channels;
+                std::function<String(const String&)> parser;
+            };
 
             /**
              * @brief Private constructor of Logger
              * @param channels A map of all the channels by Uuid
              */
-            CASIMIR_EXPORT explicit Logger(const std::unordered_map<Uuid, std::vector<std::shared_ptr<AbstractLoggerChannel>>>& channels);
+            CASIMIR_EXPORT explicit Logger(const std::unordered_map<Uuid, __LoggerChannelStorage>& channels);
 
         public:
             /**
@@ -188,15 +207,18 @@ namespace Casimir {
          */
         class LoggerBuilder {
         private:
-            std::unordered_map<Uuid, std::vector<std::shared_ptr<AbstractLoggerChannel>>> m_channels;
+            std::unordered_map<Uuid, Logger::__LoggerChannelStorage> m_channels;
 
         public:
             /**
              * @brief Register a new channel in the future Logger
+             * @param uuid The new channel will be register under the uuid name
              * @param channel A shared pointer to an instance of AbstractLoggerChannel
+             * @param parser The parsing object that enable to control the resulting message
              * @return A self-reference
              */
-            CASIMIR_EXPORT LoggerBuilder& registerChannelAt(const Uuid& uuid, const std::shared_ptr<AbstractLoggerChannel>& channel);
+            CASIMIR_EXPORT LoggerBuilder& registerChannelAt(const Uuid& uuid, const std::shared_ptr<AbstractLoggerChannel>& channel,
+                                                            const std::function<String(const String&)>& parser);
 
             /**
              * @brief Create a new instance of logger based on the configuration above
@@ -209,18 +231,16 @@ namespace Casimir {
          * @brief Simple logger that log the resulting message to the terminal
          */
         class ShellLogger : public AbstractLoggerChannel {
+            CASIMIR_DISABLE_COPY_MOVE(ShellLogger)
         private:
             Mutex m_mutex;
-            std::function<String(const String&)> m_parser;
 
         public:
             /**
              * @brief Default constructor that take a parser as input
-             * @param parser An function that parse a String to another String. This function will be called
-             * every single time the shellLogger::log is called
              * @note The function pass as the parse must be thread-safe
              */
-            CASIMIR_EXPORT explicit ShellLogger(std::function<String(const String&)> parser);
+            CASIMIR_EXPORT explicit ShellLogger();
 
             /**
              * @brief Override the log from the AbstractLoggerChannel. Log a message to the screen.
@@ -228,6 +248,35 @@ namespace Casimir {
              * @param msg the message to be logged
              */
             CASIMIR_EXPORT void log(const String &msg) override;
+        };
+
+        /**
+         * @brief Create a logger object that redirect all the output to a given log file.
+         * @note This function is thread-safe and therefore could be use at the same time in different thread
+         */
+        class FileLogger : public AbstractLoggerChannel {
+            CASIMIR_DISABLE_COPY_MOVE(FileLogger);
+        private:
+            Mutex m_mutex;
+            std::fstream* m_fstream;
+
+        public:
+            /**
+             * @brief Default FileLogger constructor
+             * @param filepath the file path where we want the output to be logged
+             */
+            CASIMIR_EXPORT explicit FileLogger(const String& filepath);
+
+            /**
+             * @brief Log a given msg directly to a file (without any further parsing done)
+             * @param msg the String we wanted to append into the log file
+             */
+            CASIMIR_EXPORT void log(const String &msg) override;
+
+            /**
+             * @brief FileLogger destructor that close the log file.
+             */
+            CASIMIR_EXPORT ~FileLogger();
         };
 
 

@@ -54,15 +54,15 @@ namespace Casimir {
             {}
 
             /**
-             * @brief Construct a string based on a \link std::string
-             * @param str the \link std::string use to construct the \link Casimir::utilities::String
+             * @brief Construct a string based on a std::string
+             * @param str the std::string use to construct the Casimir::utilities::String
              */
             inline String(std::string str)
                 : m_str(std::move(str))
             {}
 
             /**
-             * @brief Construct a string based on a \link utilities::StringSerializable object
+             * @brief Construct a string based on a utilities::StringSerializable object
              * @param serializable the serializable object
              */
             inline String(const StringSerializable& serializable)
@@ -71,7 +71,7 @@ namespace Casimir {
 
             /**
              * @brief Convert a value to a String
-             * @param value the `value` to be converted to a \link utilities::String
+             * @param value the `value` to be converted to a utilities::String
              * @return the resulting string
              */
             static String toString(cint value) {
@@ -80,7 +80,7 @@ namespace Casimir {
 
             /**
              * @brief Convert a value to a String
-             * @param value the `value` to be converted to a \link utilities::String
+             * @param value the `value` to be converted to a utilities::String
              * @return the resulting string
              */
             static String toString(double value) {
@@ -89,7 +89,7 @@ namespace Casimir {
 
             /**
              * @brief Convert a value to a String
-             * @param value the `value` to be converted to a \link utilities::String
+             * @param value the `value` to be converted to a utilities::String
              * @return the resulting string
              */
             static String toString(float value) {
@@ -98,7 +98,7 @@ namespace Casimir {
 
             /**
              * @brief Convert a `string` to a String. (Notice this trivial function is used in case of template function)
-             * @param value the `value` to be converted to a \link utilities::String
+             * @param value the `value` to be converted to a utilities::String
              * @return the resulting string
              */
              static String toString(String value) {
@@ -106,7 +106,7 @@ namespace Casimir {
              }
 
             /**
-             * @brief Append a \link std::string at the end of the current string
+             * @brief Append a std::string at the end of the current string
              * @param str the string append
              */
             inline void append(const std::string& str) {
@@ -114,7 +114,7 @@ namespace Casimir {
             }
 
             /**
-             * @brief Append a \link Casimir::utilities::String at the end of the current string
+             * @brief Append a Casimir::utilities::String at the end of the current string
              * @param str the string append
              */
             inline void append(const String& str) {
@@ -147,7 +147,7 @@ namespace Casimir {
             }
 
             /**
-             * @brief Convert the \link utilities::String object to a \link std::string object
+             * @brief Convert the utilities::String object to a std::string object
              * @return An equivalent std::string object
              */
             inline std::string str() const {
@@ -163,7 +163,7 @@ namespace Casimir {
             }
 
             /**
-             * @brief Equality operator between two \link utilities::String
+             * @brief Equality operator between two utilities::String
              * @param str The second String we are comparing to
              * @return Whether or not the two string are equivalent
              */
@@ -172,7 +172,7 @@ namespace Casimir {
             }
 
             /**
-             * @brief Non-equality operator between two \link utilities::String
+             * @brief Non-equality operator between two utilities::String
              * @param str The second String we are comparing to
              * @return Whether or not the two string are different
              */
@@ -198,7 +198,7 @@ namespace Casimir {
             }
 
             /**
-             * @brief Find the first occurrences of the research \link utilities::String from the position `afterPos`
+             * @brief Find the first occurrences of the research utilities::String from the position `afterPos`
              * @param research The sub-string to find in the current instance
              * @param afterPos The position where we start the research
              * @return The position of the characters before the first occurrence of `research` after the afterPos. If
@@ -207,7 +207,7 @@ namespace Casimir {
             CASIMIR_EXPORT cuint findFirstOf(const String& research, const cuint& afterPos) const;
 
             /**
-             * @brief Find the last occurrences of the research \link utilities::String before the position `beforePos`
+             * @brief Find the last occurrences of the research utilities::String before the position `beforePos`
              * @param research The sub-string to find in the current instance
              * @param beforePos The position where we stop the research
              * @return The position of the characters before the last occurrence of `research` before the beforePos. If
@@ -281,7 +281,7 @@ namespace Casimir {
              * @param separator The separator token (the string is split on each occurrence of this argument)
              * @param discardEmptyStrings Defines the behavior of the empty string. If an empty string is detected and
              * this argument is set to true then the empty string will be ignored
-             * @return An \link std::vector<utilities::String> of the split string
+             * @return An std::vector<utilities::String> of the split string
              */
             CASIMIR_EXPORT std::vector<String> split(const String& separator, bool discardEmptyStrings = false) const;
 
@@ -393,7 +393,7 @@ namespace Casimir {
          * @brief Instantiate String using a literal separator
          * @param a the C-Style string to be used to construct the resulting
          * @param len the length of the C-Style string (therefore can support null-byte)
-         * @return the resulting \link utilities::String
+         * @return the resulting utilities::String
          */
         inline utilities::String operator "" _str (const char* a, std::size_t len) {
             return utilities::String(a, (cuint) len);
