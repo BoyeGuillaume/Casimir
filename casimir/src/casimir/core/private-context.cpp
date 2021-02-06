@@ -89,13 +89,10 @@ namespace Casimir {
         std::cout << __LINE__ << std::endl;
         std::shared_ptr<FileLogger> fileLogger = nullptr;
         if (!filepath.isEmpty()) {
-            std::cout << __LINE__ << std::endl;
             fileLogger = std::make_shared<FileLogger>(filepath);
         }
-        std::cout << __LINE__ << std::endl;
         std::shared_ptr<ShellLogger> shellLogger = std::make_shared<ShellLogger>();
 
-        std::cout << __LINE__ << std::endl;
         LoggerBuilder builder = LoggerBuilder();
         std::vector<std::pair<Uuid, String>> channels = {
                 {PrivateLogging::Error, "ERROR"},
@@ -103,24 +100,20 @@ namespace Casimir {
                 {PrivateLogging::Warning, "WARN"},
                 {PrivateLogging::Note, "NOTE"},
         };
-        std::cout << __LINE__ << std::endl;
+        
         // Adding all the channels that perform parsing
         for(const auto& channel : channels) {
             std::function<String(const String&)> parser = [channel](const String& msg){ return formattedParser(msg, channel.second); };
-            std::cout << __LINE__ << std::endl;
             builder.registerChannelAt(channel.first, shellLogger, parser);
             if(fileLogger) {
                 builder.registerChannelAt(channel.first, fileLogger, parser);
-                std::cout << __LINE__ << std::endl;
             }
         }
 
         // Adding the raw channel that doesn't perform any complex parsing
         builder.registerChannelAt(PrivateLogging::Raw, shellLogger, [](const String& msg){ return msg; });
-        std::cout << __LINE__ << std::endl;
         if(fileLogger) {
             builder.registerChannelAt(PrivateLogging::Raw, fileLogger, [](const String& msg){ return msg; });
-            std::cout << __LINE__ << std::endl;
         }
 
         // Return the constructed Logger
