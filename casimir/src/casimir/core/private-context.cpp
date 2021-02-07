@@ -27,7 +27,7 @@ namespace Casimir {
         strftime(buffer, sizeof(buffer), "%Y-%m-%d at %H:%M:%S [ UTC%z ]", now);
 
         // No long need for now
-        delete now;
+        // delete now;
 
         return String(buffer);
     }
