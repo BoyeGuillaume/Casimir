@@ -15,11 +15,11 @@ namespace Casimir {
         time(&timePoint);
 
         // Convert it to tm structure
+        tm* now = new tm();
 #ifdef _WIN32
-        tm* now = (tm*) malloc(sizeof(tm));
         gmtime_s(now, &timePoint);
 #else
-        tm* now = gmtime(&timePoint);
+        *now = *gmtime(&timePoint);
 #endif
 
         // Retrieve the buffer
@@ -27,7 +27,7 @@ namespace Casimir {
         strftime(buffer, sizeof(buffer), "%Y-%m-%d at %H:%M:%S [ UTC%z ]", now);
 
         // No long need for now
-        free(now);
+        delete now;
 
         return String(buffer);
     }
