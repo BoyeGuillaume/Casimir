@@ -16,7 +16,7 @@ namespace Casimir {
 
         // Convert it to tm structure
 #ifdef _WIN32
-        tm* now = new tm();
+        tm* now = (tm*) malloc(sizeof(tm));
         gmtime_s(now, &timePoint);
 #else
         tm* now = gmtime(&timePoint);
@@ -27,7 +27,7 @@ namespace Casimir {
         strftime(buffer, sizeof(buffer), "%Y-%m-%d at %H:%M:%S [ UTC%z ]", now);
 
         // No long need for now
-        // delete now;
+        free(now);
 
         return String(buffer);
     }
