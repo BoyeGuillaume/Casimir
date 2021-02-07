@@ -1,18 +1,38 @@
 #ifndef CASIMIR_PRIVATE_CONTEXT_HPP_
 #define CASIMIR_PRIVATE_CONTEXT_HPP_
 
+#include <unordered_map>
+#include <utility>
+#include <functional>
+
 #include "../configuration.hpp"
 #include "../utilities/uuid.hpp"
 #include "../utilities/logger.hpp"
 
 namespace Casimir {
 
+    namespace framework {
+        class DataBlock;
+        class AbstractAllocator;
+    }
+    
     /**
      * @brief Definition of the opaque handle PrivateCasimirContext. Notice that this file MUST NEVER BE INCLUDED
      * in any exported header of the project has it will cause error.
      */
     struct PrivateCasimirContext {
         utilities::Logger logger;
+        
+        /**
+         * @brief Map of all the copy function that enable to copy data from one allocator (interface) to another one
+         *
+         * The key is a pair of two AbstractAllocator* that represent in order the destination allocator and the source
+         * allocator
+         *
+         * The value is a function that take as input the destination and the source DataBlock and perform the conversion         *
+         */
+        std::unordered_map<std::pair<framework::AbstractAllocator*, framework::AbstractAllocator*>,
+            std::function<void(framework::DataBlock*, const framework::DataBlock*)>> copyFunctions;
     };
 
     namespace PrivateLogging {

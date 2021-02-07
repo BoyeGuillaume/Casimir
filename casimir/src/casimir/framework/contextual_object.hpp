@@ -12,9 +12,8 @@ namespace Casimir::framework {
 
     public:
         inline explicit ContextualObject(CasimirContext ctx) : m_ctx(ctx) {}
-
-    protected:
-        inline PrivateCasimirContext* ctx() const {
+        
+        inline CasimirContext ctx() const {
             return m_ctx;
         }
     };

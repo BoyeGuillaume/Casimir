@@ -18,7 +18,9 @@ set(CASIMIR_EXPORTED_HEADER
         "casimir/utilities/optional.hpp"
         "casimir/utilities/cmutex.hpp"
         "casimir/framework/contextual_object.hpp"
+        "casimir/framework/interface.hpp"
         "casimir/framework/datatype.hpp"
+        "casimir/framework/allocator.hpp"
 )
 
 # List all of the other header used by the project but not exported by the library
@@ -39,6 +41,7 @@ set(CASIMIR_SOURCE_FILES
         "${CASIMIR_SOURCE_DIRS}/utilities/logger.cpp"
         "${CASIMIR_SOURCE_DIRS}/utilities/cmutex.cpp"
         "${CASIMIR_SOURCE_DIRS}/framework/contextual_object.cpp"
+        "${CASIMIR_SOURCE_DIRS}/framework/allocator.cpp"
         "${CASIMIR_SOURCE_DIRS}/framework/datatype.cpp"
 )
 
