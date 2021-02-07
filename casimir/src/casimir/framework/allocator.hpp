@@ -18,7 +18,7 @@ namespace Casimir::framework {
      * @brief DataBlock store the pointer to a data chunk allocated by an Allocator.
      * It also keep track of the size of the block as long as the allocator and it's validity
      */
-    class DataBlock : public utilities::StringSerializable, ContextualObject {
+    class DataBlock : public utilities::StringSerializable, public ContextualObject {
         CASIMIR_DISABLE_COPY_MOVE(DataBlock)
         friend class AbstractAllocator;
     private:
@@ -107,7 +107,7 @@ namespace Casimir::framework {
     /**
      * @brief The AbstractAllocator is aimed at managing the memory of a given interface (for instance GPU).
      */
-    class AbstractAllocator : public utilities::StringSerializable, ContextualObject {
+    class AbstractAllocator : public utilities::StringSerializable, public ContextualObject, public IndexableObject {
         CASIMIR_DISABLE_COPY_MOVE(AbstractAllocator)
         friend class DataBlock;
     protected:
@@ -126,8 +126,9 @@ namespace Casimir::framework {
          * @brief Default constructor of the AbstractAllocator
          * @param ctx Because an allocator is an contextual object require a context to constructor the object
          */
-        inline explicit AbstractAllocator(CasimirContext ctx)
-                : ContextualObject(ctx) {}
+        inline explicit AbstractAllocator(CasimirContext ctx, utilities::Uuid uuid)
+                : ContextualObject(ctx),
+                  IndexableObject(std::move(uuid)) {}
         
         /**
          * @brief Create a DataBlock
@@ -163,6 +164,12 @@ namespace Casimir::framework {
          * @return The resulting DataBlock that hold both the data addresses and the size
          */
         virtual DataBlock* malloc(cuint size) = 0;
+        
+        /**
+         * @brief Return the interface that uses the current allocator
+         * @return the interface linked to the current allocator
+         */
+        virtual AbstractInterface* interface() const = 0;
     };
     
 }

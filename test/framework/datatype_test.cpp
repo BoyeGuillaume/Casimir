@@ -9,7 +9,7 @@ using namespace literals;
 using namespace framework;
 
 TEST(DataType, BasicTypeBuilder) {
-	CasimirContext ctx = createContext("");
+	CasimirContext ctx = createContext(ContextConfiguration().withLogToShell(false));
 	
 	DataType floatT = DataTypeBuilder()
 		.setType(EDataType::Float)
@@ -40,7 +40,7 @@ TEST(DataType, BasicTypeBuilder) {
 }
 
 TEST(DataType, ComplexTypeBuilder) {
-	CasimirContext ctx = createContext("");
+	CasimirContext ctx = createContext(ContextConfiguration().withLogToShell(false));
 	
 	DataType cType = DataTypeBuilder()
 		.asStructure()

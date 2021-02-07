@@ -51,7 +51,7 @@ namespace Casimir::framework {
         
         // Create the pair of allocator in orders
         // destination - source
-        std::pair<AbstractAllocator*, AbstractAllocator*> keys = std::make_pair(destinationAllocator, sourceAllocator);
+        std::pair<IndexableObject, IndexableObject> keys = std::make_pair(destinationAllocator->index(), sourceAllocator->index());
         
         // Insert the new value
         destinationAllocator->ctx()->copyFunctions.insert(std::make_pair(keys, copyFunction));
@@ -67,7 +67,7 @@ namespace Casimir::framework {
         CasimirContext  ctx = to->ctx();
         
         // First retrieve the source and the destination allocators
-        std::pair<AbstractAllocator*, AbstractAllocator*> keys = std::make_pair(to->allocator(), from->allocator());
+        std::pair<IndexableObject, IndexableObject> keys = std::make_pair(to->allocator()->index(), from->allocator()->index());
         
         // Find the value corresponding to the given keys
         auto it = ctx->copyFunctions.find(keys);

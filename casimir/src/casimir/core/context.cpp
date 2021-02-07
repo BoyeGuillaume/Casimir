@@ -3,9 +3,9 @@
 
 namespace Casimir {
 
-    CASIMIR_EXPORT CasimirContext createContext(const char* filepath) {
+    CASIMIR_EXPORT CasimirContext createContext(const ContextConfiguration& configuration) {
         // Instantiate the logger
-        utilities::Logger logger = instantiateLogger(filepath);
+        utilities::Logger logger = instantiateLogger(configuration.m_logFile, configuration.m_logToShell);
         
         // Display the header in the logger
         logger(PrivateLogging::Raw) << utilities::String('=', 100) << "\n";
@@ -23,5 +23,5 @@ namespace Casimir {
         // Delete the context
         delete (PrivateCasimirContext*) ctx;
     }
-
+    
 };

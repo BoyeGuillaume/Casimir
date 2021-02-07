@@ -8,6 +8,7 @@
 #include "../configuration.hpp"
 #include "../utilities/uuid.hpp"
 #include "../utilities/logger.hpp"
+#include "../framework/indexable.hpp"
 
 namespace Casimir {
 
@@ -26,12 +27,12 @@ namespace Casimir {
         /**
          * @brief Map of all the copy function that enable to copy data from one allocator (interface) to another one
          *
-         * The key is a pair of two AbstractAllocator* that represent in order the destination allocator and the source
-         * allocator
+         * The key is a pair of two Uuid that represent in order the destination allocator uuid and the source
+         * allocator uuid
          *
          * The value is a function that take as input the destination and the source DataBlock and perform the conversion         *
          */
-        std::unordered_map<std::pair<framework::AbstractAllocator*, framework::AbstractAllocator*>,
+        std::unordered_map<std::pair<framework::IndexableObject, framework::IndexableObject>,
             std::function<void(framework::DataBlock*, const framework::DataBlock*)>> copyFunctions;
     };
 
@@ -83,8 +84,7 @@ namespace Casimir {
      * @throw Casimir::Exception if we cannot open / create or write into the given filepath
      * @return The resulting utilities::Logger
      */
-    CASIMIR_EXPORT utilities::Logger instantiateLogger(const utilities::String& filepath);
-
-};
+    CASIMIR_EXPORT utilities::Logger instantiateLogger(const utilities::String& filepath, bool logToShell);
+}
 
 #endif

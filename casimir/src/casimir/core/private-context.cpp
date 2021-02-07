@@ -85,8 +85,7 @@ namespace Casimir {
         return output;
     }
 
-    CASIMIR_EXPORT utilities::Logger instantiateLogger(const String& filepath) {
-        std::cout << __LINE__ << std::endl;
+    CASIMIR_EXPORT utilities::Logger instantiateLogger(const utilities::String& filepath, bool logToShell) {
         std::shared_ptr<FileLogger> fileLogger = nullptr;
         if (!filepath.isEmpty()) {
             fileLogger = std::make_shared<FileLogger>(filepath);
@@ -104,20 +103,23 @@ namespace Casimir {
         // Adding all the channels that perform parsing
         for(const auto& channel : channels) {
             std::function<String(const String&)> parser = [channel](const String& msg){ return formattedParser(msg, channel.second); };
-            builder.registerChannelAt(channel.first, shellLogger, parser);
+            if(logToShell) {
+                builder.registerChannelAt(channel.first, shellLogger, parser);
+            }
             if(fileLogger) {
                 builder.registerChannelAt(channel.first, fileLogger, parser);
             }
         }
 
         // Adding the raw channel that doesn't perform any complex parsing
-        builder.registerChannelAt(PrivateLogging::Raw, shellLogger, [](const String& msg){ return msg; });
+        if(logToShell) {
+            builder.registerChannelAt(PrivateLogging::Raw, shellLogger, [](const String& msg){ return msg; });
+        }
         if(fileLogger) {
             builder.registerChannelAt(PrivateLogging::Raw, fileLogger, [](const String& msg){ return msg; });
         }
 
         // Return the constructed Logger
-        std::cout << __LINE__ << std::endl;
         return builder.create();
     }
 }
