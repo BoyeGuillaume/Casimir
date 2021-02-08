@@ -48,10 +48,11 @@ namespace Casimir {
     
     CASIMIR_EXPORT utilities::String utilities::String::substr(const cuint &start, const cuint &length) const {
 #ifdef CASIMIR_SAFE_CHECK
-      if(start + length > this->length()) {
-          CASIMIR_THROW_EXCEPTION("IndexOutOfRange", "Cannot perform the given operation"
+        // Notice that the second condition in here is for cases where start + 1 overflow and became smallest than start
+        if(start + length > this->length() || start > this->length()) {
+            CASIMIR_THROW_EXCEPTION("IndexOutOfRange", "Cannot perform the given operation"
                                                      "as the specified region isn't fully contained by the string");
-      }
+        }
 #endif
         return String(m_str.substr(start, length));
     }

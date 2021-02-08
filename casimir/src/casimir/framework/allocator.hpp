@@ -33,7 +33,7 @@ namespace Casimir::framework {
          * @param ctx DataBlock are ContextualObject and required to live in a given context
          * @param ptr The data chunk pointer (not necessary in the memory)
          * @param size The size of the data chunk hold by this block
-         * @param allocator The allocator that has malloc this chunk of data
+         * @param allocator The allocator that has allocate this chunk of data
          * @param parent The parent DataBlock. By default nullptr is used if this Block is actually a SubBlock
          * of some more important data
          * @param validity The validity of the data hold by the current block (true by default became false if the data
@@ -167,7 +167,7 @@ namespace Casimir::framework {
          * @param size The size of the chunk of data we want to allocate
          * @return The resulting DataBlock that hold both the data addresses and the size
          */
-        virtual DataBlock* malloc(cuint size) = 0;
+        virtual DataBlock* allocate(cuint size) = 0;
         
         /**
          * @brief Return the interface that uses the current allocator

@@ -40,49 +40,33 @@ namespace Casimir {
         const String channelNameF = channelName + " : ";
         const cuint timeAndDateSize = 50;
         const cuint lineContentWidth = 60;
-        const cuint minLineContentWidth = 30;
 
         // Create the header part
         String output = "[ " + currentTime + " ] ";
         output.append(toUnsigned((cint) timeAndDateSize - (cint) output.length() - (cint) channelNameF.length()), ' ');
         output.append(channelNameF);
 
-        // Loop other the string and wrap each word if required
-        cuint position = 0;
-        cuint lineStartingPosition = 0;
-        while (position < str.length()) {
-            // Find next position with a space
-            cuint nextPosition = str.findFirstOf(" ", position);
+        // Retrieve all the word of the current output
+        std::vector<String> words = str.split(" ", true);
+        String appended;
+        for (cuint i = 0; i < words.size(); ++i) {
+            // And the new words
+            appended.append(words[i] + " ");
 
-            // If the next word doesn't wrap into the line
-            if (nextPosition - lineStartingPosition >= lineContentWidth) {
-                // Either word-wrap or space-wrap
-                if (position - lineStartingPosition > minLineContentWidth) { // Space wrap
-                    output.append(str.substr(lineStartingPosition, position - lineStartingPosition));
-                    output.append(lineContentWidth - (position - lineStartingPosition), ' ');
+            // If there's more than only one line then split the next words
+            if (i + 1 == words.size() || appended.length() + words[i + 1].length() > lineContentWidth) {
+                output.append(appended);
+                if (i + 1 < words.size()) {
+                    output.append(toUnsigned((cint)lineContentWidth - (cint)appended.length()), ' ');
                     output.append("\n");
                     output.append(timeAndDateSize - 2, ' ');
                     output.append("| ");
-                    lineStartingPosition = position;
-                    position = nextPosition + 1 > nextPosition ? nextPosition + 1 : nextPosition;
-                } else { // Word-wrap (assert nextPosition is valid)
-                    const cuint length = std::min(lineContentWidth - 1, str.length() - lineStartingPosition);
-                    if (str.length() - lineStartingPosition < lineContentWidth) { // If no more line after this one
-                        output.append(str.substr(lineStartingPosition, length) + "\n");
-                    }
-                    else {
-                        output.append(str.substr(lineStartingPosition, length) + "-\n");
-                        output.append(timeAndDateSize - 2, ' ');
-                        output.append("| ");
-                    }
-                    lineStartingPosition += length;
-                    position = lineStartingPosition;
                 }
-            } else {
-                position = nextPosition + 1;
+                appended = "";
             }
         }
-        return output;
+        
+        return output + "\n";
     }
 
     CASIMIR_EXPORT utilities::Logger instantiateLogger(const utilities::String& filepath, bool logToShell) {

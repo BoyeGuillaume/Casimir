@@ -14,6 +14,8 @@
 
 namespace Casimir::core {
     
+    using namespace literals;
+    
     CASIMIR_EXPORT HeapAllocator::HeapAllocator(HeapInterface* heapInterface)
             : AbstractAllocator(heapInterface->ctx(), heapInterface->uuid()), m_interface(heapInterface) {
         // Debug the construction if required
@@ -34,7 +36,7 @@ namespace Casimir::core {
         }
     }
     
-    CASIMIR_EXPORT framework::DataBlock* HeapAllocator::malloc(cuint size) {
+    CASIMIR_EXPORT framework::DataBlock* HeapAllocator::allocate(cuint size) {
         const cuint blockAlignment = m_interface->m_config.blockAlignment();
         
         // Debug the memory
@@ -89,6 +91,10 @@ namespace Casimir::core {
     
     CASIMIR_EXPORT framework::AbstractInterface* HeapAllocator::interface() const  {
         return (framework::AbstractInterface*) m_interface;
+    }
+    
+    CASIMIR_EXPORT utilities::String HeapAllocator::toString() const {
+        return "HeapAllocator(uuid=" + uuid() + ", trackedSize=" + utilities::String::toString((cint) m_blocks.size()) + ")";
     }
     
 }

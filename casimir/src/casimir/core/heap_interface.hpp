@@ -88,7 +88,7 @@ namespace Casimir::core {
         /**
          * @brief Each framework::DataBlock are aligned to a specific power of 2
          * @param blockAlignment The value of the parameters. If 0 then the blocks are allocate with default alignment
-         * (using the malloc function)
+         * (using the allocate function)
          * @return A self-reference
          */
         inline HeapConfiguration& withBlockAlignment(cuint blockAlignment) {
@@ -132,6 +132,12 @@ namespace Casimir::core {
          * @return A String that defines the current allocator
          */
         CASIMIR_EXPORT utilities::String name() const override;
+        
+        /**
+         * @brief Return a String that describe the current state of the HeapInterface
+         * @return A utilities::String that describe the current object
+         */
+        CASIMIR_EXPORT utilities::String toString() const override;
     };
     
     /**

@@ -43,7 +43,7 @@ namespace Casimir::core {
          * @brief Default HeapAllocator constructor
          * @param heapInterface The heap interface attached to the current allocator
          */
-        CASIMIR_EXPORT HeapAllocator(HeapInterface* heapInterface);
+        CASIMIR_EXPORT explicit HeapAllocator(HeapInterface* heapInterface);
         
     public:
         /**
@@ -52,13 +52,19 @@ namespace Casimir::core {
          * @throw utilities::Exception if the operation failed
          * @return A new instance of framework::DataBlock that contains at least `size` bytes of raw data
          */
-        CASIMIR_EXPORT framework::DataBlock* malloc(cuint size) override;
+        CASIMIR_EXPORT framework::DataBlock* allocate(cuint size) override;
         
         /**
          * @brief Return the parent interface attached to the current allocator
          * @return The parent interface attached to the current allocator
          */
         CASIMIR_EXPORT framework::AbstractInterface* interface() const override;
+        
+        /**
+         * @brief Return a utilities::String that describe the current state of HeapAllocator
+         * @return A string that describe the current object
+         */
+        CASIMIR_EXPORT utilities::String toString() const override;
     };
     
 }
