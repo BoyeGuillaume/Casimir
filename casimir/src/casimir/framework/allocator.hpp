@@ -69,7 +69,7 @@ namespace Casimir::framework {
          * @brief Default destructor of the DataBlock. This methods will call the AbstractAllocator::internalFree
          * with a reference to self if the block is the root block (has no parents)
          */
-        CASIMIR_EXPORT ~DataBlock();
+        CASIMIR_EXPORT virtual ~DataBlock();
    
         /**
          * @brief Return the data hold by the block

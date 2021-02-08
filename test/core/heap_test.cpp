@@ -29,7 +29,7 @@ TEST(Heap, HeapAllocation) {
 	EXPECT_EQ(db_root->allocator(), heapInterface->allocator());
 	
 	// Try to write thing to the data buffer
-	std::memset(db_root->data(), 0, db_root->size());
+	memset(db_root->data(), 0, db_root->size());
 
 	// Free the allocator
 	delete db_root;
