@@ -6,9 +6,10 @@
 #include "../casimir.hpp"
 #include "../framework/allocator.hpp"
 #include "../framework/interface.hpp"
-#include "heap_interface.hpp"
 
 namespace Casimir::core {
+    
+    class HeapInterface;
     
     /**
      * @brief An HeapAllocator is the standard base allocator. It defines the standard memory
@@ -57,9 +58,7 @@ namespace Casimir::core {
          * @brief Return the parent interface attached to the current allocator
          * @return The parent interface attached to the current allocator
          */
-        inline framework::AbstractInterface* interface() const override {
-            return (framework::AbstractInterface*) m_interface;
-        }
+        CASIMIR_EXPORT framework::AbstractInterface* interface() const override;
     };
     
 }

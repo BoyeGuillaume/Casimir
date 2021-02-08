@@ -1,6 +1,7 @@
 #include "heap_allocator.hpp"
 #include "private-context.hpp"
 #include "../utilities/exception.hpp"
+#include "heap_interface.hpp"
 
 #include <memory>
 #include <cstdlib>
@@ -84,6 +85,10 @@ namespace Casimir::core {
         if(m_interface->m_config.debugMemory()) {
             ctx()->logger(PrivateLogging::Note) << "Free the chunk of data at " << dataBlock->parentOrElseSelf()->data();
         }
+    }
+    
+    CASIMIR_EXPORT framework::AbstractInterface* HeapAllocator::interface() const  {
+        return (framework::AbstractInterface*) m_interface;
     }
     
 }
