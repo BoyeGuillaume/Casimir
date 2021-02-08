@@ -17,12 +17,7 @@ namespace Casimir::core {
         m_allocator = new HeapAllocator(this);
     }
     
-    CASIMIR_EXPORT HeapInterface::~HeapInterface() {
-        // First debug the destruction
-        if(m_config.debug()) {
-            ctx()->logger(PrivateLogging::Note) << "Destruction of the HeapInterface at 0x" << this << " with uuid " << uuid();
-        }
-        
+    CASIMIR_EXPORT HeapInterface::~HeapInterface() {        
         // Then destruct the sub allocator
         delete m_allocator;
     }

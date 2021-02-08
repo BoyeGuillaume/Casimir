@@ -26,11 +26,14 @@ namespace Casimir::framework {
          * @param ctx Because AbstractInterface is a ContextualObject each object are constructed with a given
          * context
          */
-        inline AbstractInterface(CasimirContext ctx, utilities::Uuid uuid)
-            : ContextualObject(ctx),
-              IndexableObject(std::move(uuid)) {}
+        CASIMIR_EXPORT AbstractInterface(CasimirContext ctx, utilities::Uuid uuid);
         
     public:
+        /**
+         * @brief Destructor of any AbstractInterface (will unregister the interface
+         */
+        CASIMIR_EXPORT virtual ~AbstractInterface();
+        
         /**
          * @brief Retrieve the AbstractAllocator object linked to the current interface. It is used to manager memory
          * @return The linked AbstractAllocator*
@@ -42,7 +45,6 @@ namespace Casimir::framework {
          * @return A utilities::String that hold the name of the interface
          */
         virtual utilities::String name() const = 0;
-        
     };
     
 }

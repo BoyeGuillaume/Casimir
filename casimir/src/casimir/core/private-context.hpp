@@ -2,6 +2,7 @@
 #define CASIMIR_PRIVATE_CONTEXT_HPP_
 
 #include <unordered_map>
+#include <unordered_set>
 #include <utility>
 #include <functional>
 
@@ -9,13 +10,10 @@
 #include "../utilities/uuid.hpp"
 #include "../utilities/logger.hpp"
 #include "../framework/indexable.hpp"
+#include "../framework/interface.hpp"
+#include "../framework/allocator.hpp"
 
 namespace Casimir {
-
-    namespace framework {
-        class DataBlock;
-        class AbstractAllocator;
-    }
     
     /**
      * @brief Definition of the opaque handle PrivateCasimirContext. Notice that this file MUST NEVER BE INCLUDED
@@ -34,6 +32,8 @@ namespace Casimir {
          */
         std::unordered_map<std::pair<framework::IndexableObject, framework::IndexableObject>,
             std::function<void(framework::DataBlock*, const framework::DataBlock*)>> copyFunctions;
+        
+        std::unordered_set<framework::AbstractInterface*> interfaces;
     };
 
     namespace PrivateLogging {

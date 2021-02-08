@@ -49,6 +49,7 @@ set(CASIMIR_SOURCE_FILES
         "${CASIMIR_SOURCE_DIRS}/framework/allocator.cpp"
         "${CASIMIR_SOURCE_DIRS}/framework/datatype.cpp"
         "${CASIMIR_SOURCE_DIRS}/framework/indexable.cpp"
+        "${CASIMIR_SOURCE_DIRS}/framework/interface.cpp"
 )
 
 # Retrieve all the headers to the expected format

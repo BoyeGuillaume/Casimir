@@ -119,7 +119,7 @@ namespace Casimir::core {
         /**
          * @brief Destruct the current heap interface (as long as the associate allocator)
          */
-        CASIMIR_EXPORT ~HeapInterface();
+        CASIMIR_EXPORT ~HeapInterface() override;
         
         /**
          * @brief Retrieve the allocator associate to the HeapInterface

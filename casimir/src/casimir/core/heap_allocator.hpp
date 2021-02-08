@@ -37,7 +37,7 @@ namespace Casimir::core {
          * @note If the configuration `trackBlocks` flags is HIGH then this operation will free all the data tracked by
          * the current allocator
          */
-        CASIMIR_EXPORT ~HeapAllocator();
+        CASIMIR_EXPORT virtual ~HeapAllocator();
 
         /**
          * @brief Default HeapAllocator constructor

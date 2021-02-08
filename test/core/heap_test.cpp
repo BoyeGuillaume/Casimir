@@ -33,6 +33,7 @@ TEST(Heap, HeapAllocation) {
 
 	// Free the allocator
 	delete db_root;
+	delete heapInterface;
 
 	releaseContext(ctx);
 }
