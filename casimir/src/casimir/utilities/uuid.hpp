@@ -18,27 +18,36 @@ namespace Casimir {
          */
         class Uuid : public StringSerializable {
         private:
-            ubyte m_rawData[16];
+            union {
+                ubyte m_rawData[16];
+                struct {
+                    uint64 mostSignificant;
+                    uint64 lessSignificant;
+                } bytes;
+            };
 
         public:
             /**
              * @brief Default Uuid constructor (create a NIL Uuid)
              */
-            CASIMIR_EXPORT Uuid();
+            inline constexpr Uuid()
+            : bytes{0U,0U} {}
 
             /**
              * @brief Construct an new instance of Uuid based on come rawData
              * @warning The rawData must have at least 16 bytes (only 16 bytes will be read)
              * @param rawData The raw data used to construct the Uuid (MUST BE 16 BYTES)
              */
-            CASIMIR_EXPORT explicit Uuid(const ubyte* rawData) noexcept;
+            inline constexpr explicit Uuid(const ubyte* rawData) noexcept
+            : bytes{*((uint64*) rawData), *(((uint64*) rawData) + 1)} {}
 
             /**
              * @brief Create a new Uuid based on two x64 integer
              * @param mostSignificant the first integer used to construct the Uuid (mostSignificant one)
              * @param lessSignificant the second integer used to construct the Uuid (lessSignificant one)
              */
-            CASIMIR_EXPORT Uuid(const uint64& mostSignificant, const uint64& lessSignificant);
+            inline constexpr Uuid(const uint64& mostSignificant, const uint64& lessSignificant)
+            : bytes{mostSignificant, lessSignificant} {}
 
             /**
              * @brief Construct a new utilities::Uuid from a utilities::String containing the raw data
@@ -100,7 +109,7 @@ namespace Casimir {
              * @return A pointer to the most significant part of the Uuid
              */
             inline const uint64* mostSignificant() const {
-                return (uint64*) rawData();
+                return &bytes.mostSignificant;
             }
 
             /**
@@ -108,7 +117,7 @@ namespace Casimir {
              * @return A pointer to the less significant part of the Uuid
              */
             inline const uint64* lessSignificant() const {
-                return mostSignificant() + 1;
+                return &bytes.lessSignificant;
             }
 
             /**

@@ -102,6 +102,10 @@ namespace Casimir::framework {
         inline cuint size() const {
             return m_size;
         }
+    
+        inline DataBlock* parentOrElseSelf() {
+            return (m_parent != nullptr) ? m_parent : this;
+        }
     };
     
     /**

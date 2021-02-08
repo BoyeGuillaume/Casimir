@@ -40,27 +40,27 @@ namespace Casimir {
         /**
          * @brief This channel uses the standard parsing and display any warning message
          */
-        static const utilities::Uuid Warning = utilities::Uuid(17707170361395375139U, 4856449981596320257U);
+        static constexpr utilities::Uuid Warning = utilities::Uuid(17707170361395375139U, 4856449981596320257U);
 
         /**
          * @brief This channel uses the standard parsing and display any error
          */
-        static const utilities::Uuid Error   = utilities::Uuid(9631149747179961252U, 4669447320871580547U);
+        static constexpr utilities::Uuid Error   = utilities::Uuid(9631149747179961252U, 4669447320871580547U);
 
         /**
          * @brief This channel uses the standard parsing and display a note
          */
-        static const utilities::Uuid Note    = utilities::Uuid(2499535614363860142U, 15273922473455247291U);
+        static constexpr utilities::Uuid Note    = utilities::Uuid(2499535614363860142U, 15273922473455247291U);
 
         /**
          * @brief This channel uses the standard parsing and display an Information
          */
-        static const utilities::Uuid Info    = utilities::Uuid(5424077037978735843U, 1871455045818645681U);
+        static constexpr utilities::Uuid Info    = utilities::Uuid(5424077037978735843U, 1871455045818645681U);
 
         /**
          * @brief This channel uses no parsing and display a raw string
          */
-        static const utilities::Uuid Raw     = utilities::Uuid(1927683511390330006U, 7972939591306549178U);
+        static constexpr utilities::Uuid Raw     = utilities::Uuid(1927683511390330006U, 7972939591306549178U);
     }
 
     /**

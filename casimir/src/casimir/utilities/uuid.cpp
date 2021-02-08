@@ -5,20 +5,7 @@
 namespace Casimir {
 
     using namespace literals;
-
-    CASIMIR_EXPORT utilities::Uuid::Uuid() {
-        memset(m_rawData, 0, 16); // Set all the bytes to 0
-    }
-
-    CASIMIR_EXPORT utilities::Uuid::Uuid(const ubyte *rawData) noexcept {
-        memcpy(m_rawData, rawData, 16);
-    }
-
-    CASIMIR_EXPORT utilities::Uuid::Uuid(const uint64 &mostSignificant, const uint64 &lessSignificant) {
-        memcpy(m_rawData, &mostSignificant, 8);
-        memcpy(m_rawData + 8, &lessSignificant, 8);
-    }
-
+   
     CASIMIR_EXPORT utilities::Optional<utilities::Uuid> utilities::Uuid::fromRawString(const utilities::String &rawString) {
         if(rawString.length() != 16) {
             return utilities::Optional<utilities::Uuid>::empty();

@@ -26,7 +26,7 @@ namespace Casimir::framework {
         }
 #endif
 
-        return new DataBlock(ctx(), (ubyte*) data() + offset, size, allocator(), this, m_validity);
+        return new DataBlock(ctx(), (ubyte*) data() + offset, size, allocator(), parentOrElseSelf(), m_validity);
     }
     
     CASIMIR_EXPORT void* DataBlock::data() const {

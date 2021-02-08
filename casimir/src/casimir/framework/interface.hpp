@@ -18,7 +18,7 @@ namespace Casimir::framework {
      * @brief An AbstractInterface (an interface) defines a specific computational capable hardware object. It can be
      * a CPU / a GPU, etc... It must have a dedicated memory (use the allocator to manage it)
      */
-    class AbstractInterface : public utilities::StringSerializable, ContextualObject, IndexableObject {
+    class AbstractInterface : public utilities::StringSerializable, public ContextualObject, public IndexableObject {
         CASIMIR_DISABLE_COPY_MOVE(AbstractInterface)
     protected:
         /**
