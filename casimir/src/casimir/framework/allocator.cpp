@@ -45,19 +45,19 @@ namespace Casimir::framework {
         destinationAllocator->ctx()->copyFunctions.insert(std::make_pair(keys, copyFunction));
     }
     
-    CASIMIR_EXPORT void AbstractAllocator::copy(RawData* to, const RawData* from, cuint length, cuint offsetSource, cuint offsetDestination) {
+    CASIMIR_EXPORT void AbstractAllocator::copy(RawData* dest, const RawData* source, cuint length, cuint offsetDestination, cuint offsetSource) {
 #ifdef CASIMIR_SAFE_CHECK
-        if(to->ctx() != from->ctx()) {
+        if(dest->ctx() != source->ctx()) {
             CASIMIR_THROW_EXCEPTION("IncompatibleContext", "Cannot move data between different context");
         }
 #endif
         // Retrieve the context pointer
-        CasimirContext  ctx = to->ctx();
+        CasimirContext  ctx = dest->ctx();
         
         // First retrieve the source and the destination allocators
-        std::pair<IndexableObject, IndexableObject> keys = std::make_pair(to->allocator()->index(), from->allocator()->index());
+        std::pair<IndexableObject, IndexableObject> keys = std::make_pair(dest->allocator()->index(), source->allocator()->index());
         
-        // Find the value corresponding to the given keys
+        // Find the value corresponding dest the given keys
         auto it = ctx->copyFunctions.find(keys);
 
 #ifdef CASIMIR_SAFE_CHECK
@@ -65,16 +65,17 @@ namespace Casimir::framework {
             CASIMIR_THROW_EXCEPTION("OperationNotSupported", "Cannot perform the required operation because no"
                                                              "copy can be perform between the two RawData");
         }
-        if(to->size() != from->size()) {
-            CASIMIR_THROW_EXCEPTION("IndexOutOfRange", "Cannot perform the required copy as the size of the two blocks aren't compatible");
+        if(length > dest->size() || length + offsetDestination > dest->size() ||
+           length > source->size() || length + offsetSource > source->size()) {
+            CASIMIR_THROW_EXCEPTION("IndexOutOfRange", "The given range isn't compatible with the current DataRange");
         }
 #endif
         
         // Then perform the operation
-        (it->second)(to, from, length, offsetSource, offsetDestination);
+        (it->second)(dest, source, length, offsetDestination, offsetSource);
         
         // Log the operation
-        ctx->logger(PrivateLogging::Info) << "Copy " << from->size() << " bytes from " << from->data() << " to " << to->data();
+        ctx->logger(PrivateLogging::Info) << "Copy " << source->size() << " bytes source " << source->data() << " dest " << dest->data();
     }
     
 };

@@ -61,14 +61,14 @@ namespace Casimir::framework {
         // Perform the copy
         // If slice is equal to 0 IN BOTH CASES the copy is trivial
         if(dest->slice() == 0 && source->slice() == 0) {
-            AbstractAllocator::copy(dest->rawData(), source->rawData(), dest->length() * dest->dtype().sizeOf(), source->m_offset, dest->m_offset);
+            AbstractAllocator::copy(dest->rawData(), source->rawData(), dest->length() * dest->dtype().sizeOf(), dest->m_offset, source->m_offset);
         }
         // In case the slice of one isn't equal to 0 then the copy take more times
         else {
             for(cuint blockId = 0; blockId < dest->length(); ++blockId) {
                 const cuint offsetSource = source->m_offset + blockId * (source->m_length + source->m_slice);
                 const cuint offsetDestination = dest->m_offset + blockId * (dest->m_length + dest->m_slice);
-                AbstractAllocator::copy(dest->rawData(), source->rawData(), dest->dtype().sizeOf(), offsetSource, offsetDestination);
+                AbstractAllocator::copy(dest->rawData(), source->rawData(), dest->dtype().sizeOf(), offsetDestination, offsetSource);
             }
         }
     }

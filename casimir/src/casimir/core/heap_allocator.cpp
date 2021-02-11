@@ -2,9 +2,11 @@
 #include "private-context.hpp"
 #include "../utilities/exception.hpp"
 #include "heap_interface.hpp"
+#include "../framework/datachunk.hpp"
 
 #include <memory>
 #include <cstdlib>
+#include <cstring>
 
 #ifdef _WIN32
 #define aligned_alloc(size, alignement) _aligned_malloc(size, alignement)
@@ -15,6 +17,12 @@
 namespace Casimir::core {
     
     using namespace literals;
+    using namespace framework;
+    
+    CASIMIR_EXPORT void copyFromHeapAllocatorToHeapAllocator(RawData* dest, const RawData* source,
+                                                             cuint length, cuint offsetDestination, cuint offsetSource) {
+        memcpy(offsetOf(dest->data(), offsetDestination), offsetOf(source->data(), offsetSource), length);
+    }
     
     CASIMIR_EXPORT HeapAllocator::HeapAllocator(HeapInterface* heapInterface)
             : AbstractAllocator(heapInterface->ctx(), heapInterface->uuid()), m_interface(heapInterface) {
@@ -22,6 +30,10 @@ namespace Casimir::core {
         if(heapInterface->m_config.debug()) {
             ctx()->logger(PrivateLogging::Info) << "New allocator heap registered at " << this << " with uuid " << uuid();
         }
+        
+        // Register the new copy function (internal copy)
+        const auto& key = std::make_pair(heapInterface->uuid(), heapInterface->uuid());
+        ctx()->copyFunctions.insert(std::make_pair(key, copyFromHeapAllocatorToHeapAllocator));
     }
     
     CASIMIR_EXPORT HeapAllocator::~HeapAllocator() {

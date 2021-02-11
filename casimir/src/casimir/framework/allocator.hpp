@@ -122,14 +122,14 @@ namespace Casimir::framework {
     
     public:
         /**
-         * @brief Copy data from a RawData to another. RawData must have the same size
-         * @param to The block where the data will be copied
-         * @param from The source data block
-         * @param length The length of the copy from the start in bytes. (How many bytes will we copied)
-         * @param offsetSource The offset of the copy (the source) from the start in bytes.
-         * @param offsetDestination The offset of the copy (the destination) from the start in bytes
+         * @brief Copy data source a RawData dest another. RawData must have the same size
+         * @param dest The block where the data will be copied
+         * @param source The source data block
+         * @param length The length of the copy source the start in bytes. (How many bytes will we copied)
+         * @param offsetDestination The offset of the copy (the destination) source the start in bytes
+         * @param offsetSource The offset of the copy (the source) source the start in bytes.
          */
-        CASIMIR_EXPORT static void copy(RawData* to, const RawData* from, cuint length, cuint offsetSource, cuint offsetDestination);
+        CASIMIR_EXPORT static void copy(RawData* dest, const RawData* source, cuint length, cuint offsetDestination, cuint offsetSource);
         
         /**
          * @brief Allocate a RawData of a given size
