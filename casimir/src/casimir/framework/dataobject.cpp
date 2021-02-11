@@ -3,6 +3,7 @@
 #include <utility>
 
 #include "../utilities/exception.hpp"
+#include "../core/private-context.hpp"
 
 namespace Casimir::framework {
     
@@ -77,4 +78,36 @@ namespace Casimir::framework {
     }
     
     
+    CASIMIR_EXPORT DataObjectBuilder::~DataObjectBuilder() {
+        for(const DataChunk& chunks : *m_chunks) {
+            delete chunks.rawData();
+        }
+        m_chunks->clear();
+    }
+    
+    CASIMIR_EXPORT DataObjectBuilder& DataObjectBuilder::registerInterface(const Uuid& interface) {
+        // Then retrieve the interface with the given `uuid`
+        const auto& it = ctx()->interfacesByUuid.find(interface);
+#ifdef CASIMIR_SAFE_CHECK
+        if(it == ctx()->interfacesByUuid.end()) {
+            CASIMIR_THROW_EXCEPTION("InvalidArgument", "The given interface uuid doesn't correspond to anything in the current context");
+        }
+#endif
+        // Then allocator the rawData
+        const cuint requiredSize = m_length * m_dataType.sizeOf();
+        RawData* rawData = it->second->allocator()->allocate(requiredSize);
+        
+        // Create the corresponding Chunk
+        DataChunk chunk(ctx(), rawData, m_dataType, 0, m_length);
+        m_chunks->push_back(chunk);
+        
+        // Return self-reference
+        return *this;
+    }
+    
+    CASIMIR_EXPORT DataObject* DataObjectBuilder::create() {
+        auto* dataObject = new DataObject(ctx(), *m_chunks);
+        m_chunks->clear();
+        return dataObject;
+    }
 }

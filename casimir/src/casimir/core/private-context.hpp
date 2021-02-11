@@ -36,6 +36,7 @@ namespace Casimir {
             std::function<void(framework::RawData*, const framework::RawData*,cuint,cuint,cuint)>> copyFunctions;
         
         std::unordered_set<framework::AbstractInterface*> interfaces;
+        std::unordered_map<utilities::Uuid, framework::AbstractInterface*> interfacesByUuid;
     };
 
     namespace PrivateLogging {

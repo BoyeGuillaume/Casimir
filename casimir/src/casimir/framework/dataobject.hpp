@@ -11,6 +11,8 @@
 #include "../utilities/uuid.hpp"
 #include "../utilities/string_serializable.hpp"
 #include "../utilities/string.hpp"
+#include "../utilities/exception.hpp"
+
 namespace Casimir::framework {
 
     /**
@@ -100,6 +102,49 @@ namespace Casimir::framework {
          * @return A String that describe the current state of the object
          */
         CASIMIR_EXPORT utilities::String toString() const override;
+    };
+    
+    /**
+     * @brief Simple class that allocate the required spaces for any registered interface and return a data object
+     */
+    class DataObjectBuilder : public ContextualObject {
+    private:
+        std::shared_ptr<std::vector<DataChunk>> m_chunks;
+        DataType m_dataType;
+        cuint m_length;
+
+    public:
+        /**
+         * @brief Default constructor of the builder
+         * @param ctx The context in which the current builder live
+         * @param dataType The dataType of the output DataObject
+         * @param length The length of the list we wanna create
+         */
+        inline explicit DataObjectBuilder(CasimirContext ctx, const DataType& dataType, cuint length)
+        : ContextualObject(ctx),
+        m_chunks(std::make_shared<std::vector<DataChunk>>()),
+        m_dataType(dataType),
+        m_length(length)
+        {}
+        
+        /**
+         * @brief Default destructor of the builder. Free the allocated chunk if no object has been created with
+         */
+        CASIMIR_EXPORT virtual ~DataObjectBuilder();
+        
+        /**
+         * @brief Register a DataChunk linked to the given interface to the output object
+         * @param interface `uuid` of the interface (registered in the context) that will be used
+         * @return A self-reference
+         */
+        CASIMIR_EXPORT DataObjectBuilder& registerInterface(const utilities::Uuid& interface);
+        
+        /**
+         * @brief Create the DataObject with the given configuration. Notice that this operation will remove all the
+         * previous allocated interface
+         * @return The pointer to the new instance of the DataObject created from the configuration
+         */
+        CASIMIR_EXPORT DataObject* create();
         
     };
 
