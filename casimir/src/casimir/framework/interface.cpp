@@ -15,4 +15,5 @@ namespace Casimir::framework {
         auto it = ctx()->interfaces.find(this);
         ctx()->interfaces.erase(it);
     }
+    
 };

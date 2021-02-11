@@ -48,7 +48,7 @@ namespace Casimir::core {
         }
     
         /**
-         * @brief Each framework::DataBlock are aligned to a specific power of 2
+         * @brief Each framework::RawData are aligned to a specific power of 2
          * @return The value of the above parameters
          */
         inline cuint blockAlignment() const {
@@ -56,7 +56,7 @@ namespace Casimir::core {
         }
         
         /**
-         * @brief Keep track of each framework::DataBlock allocator by the HeapAllocator to an internal list
+         * @brief Keep track of each framework::RawData allocator by the HeapAllocator to an internal list
          * @param keepTrackOfDataChunk The value of the parameters
          * @return A self-reference
          */
@@ -86,7 +86,7 @@ namespace Casimir::core {
         }
         
         /**
-         * @brief Each framework::DataBlock are aligned to a specific power of 2
+         * @brief Each framework::RawData are aligned to a specific power of 2
          * @param blockAlignment The value of the parameters. If 0 then the blocks are allocate with default alignment
          * (using the allocate function)
          * @return A self-reference

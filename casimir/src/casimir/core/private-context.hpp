@@ -27,11 +27,13 @@ namespace Casimir {
          *
          * The key is a pair of two Uuid that represent in order the destination allocator uuid and the source
          * allocator uuid
+         * The other three `cuint` describe the length of the copy (from the start in bytes) and it's offset from the start
+         * (also in bytes) (of the destination and the source)
          *
-         * The value is a function that take as input the destination and the source DataBlock and perform the conversion         *
+         * The value is a function that take as input the destination and the source RawData and perform the conversion         *
          */
         std::unordered_map<std::pair<framework::IndexableObject, framework::IndexableObject>,
-            std::function<void(framework::DataBlock*, const framework::DataBlock*)>> copyFunctions;
+            std::function<void(framework::RawData*, const framework::RawData*,cuint,cuint,cuint)>> copyFunctions;
         
         std::unordered_set<framework::AbstractInterface*> interfaces;
     };

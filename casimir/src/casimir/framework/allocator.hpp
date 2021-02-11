@@ -15,61 +15,41 @@
 namespace Casimir::framework {
     
     /**
-     * @brief DataBlock store the pointer to a data chunk allocated by an Allocator.
+     * @brief RawData store the pointer to a data chunk allocated by an Allocator.
      * It also keep track of the size of the block as long as the allocator and it's validity
      */
-    class DataBlock : public utilities::StringSerializable, public ContextualObject {
-        CASIMIR_DISABLE_COPY_MOVE(DataBlock)
+    class RawData : public utilities::StringSerializable, public ContextualObject {
+        CASIMIR_DISABLE_COPY_MOVE(RawData)
         friend class AbstractAllocator;
     private:
         void* m_ptr;
         cuint m_size;
         AbstractAllocator* m_allocator;
-        DataBlock* m_parent;
-        std::shared_ptr<bool> m_validity;
         
         /**
-         * @brief Default private constructor of the DataBlock
-         * @param ctx DataBlock are ContextualObject and required to live in a given context
+         * @brief Default private constructor of the RawData
+         * @param ctx RawData are ContextualObject and required to live in a given context
          * @param ptr The data chunk pointer (not necessary in the memory)
          * @param size The size of the data chunk hold by this block
          * @param allocator The allocator that has allocate this chunk of data
-         * @param parent The parent DataBlock. By default nullptr is used if this Block is actually a SubBlock
-         * of some more important data
-         * @param validity The validity of the data hold by the current block (true by default became false if the data
-         * has been deleted)
          */
-        inline explicit DataBlock(CasimirContext ctx, void* ptr, cuint size, AbstractAllocator* allocator,
-                                  DataBlock* parent, std::shared_ptr<bool> validity)
+        inline explicit RawData(CasimirContext ctx, void* ptr, cuint size, AbstractAllocator* allocator)
                 : ContextualObject(ctx),
                 m_ptr(ptr), m_size(size),
-                m_allocator(allocator),
-                m_parent(parent),
-                m_validity(std::move(validity)) {}
+                m_allocator(allocator) {}
 
     public:
         /**
-         * @brief Extract a subBlock from the current block of data
-         * @throw utilities::Exception if the specified range isn't contained by the current block
-         * @note Deleting a sub-block doesn't affect the parent data but deleting the root object will delete the data
-         * of all the block
-         * @param offset The offset from the current pointer
-         * @param size The size of the subChunk of data
-         * @return A new DataBlock that shares a part of the data hold by the current instance
-         */
-        CASIMIR_EXPORT DataBlock* subBlock(cuint offset, cuint size);
-        
-        /**
          * @brief Convert the current block to a String for debug purpose
-         * @return A utilities::String that describe the current state of the DataBlock
+         * @return A utilities::String that describe the current state of the RawData
          */
         CASIMIR_EXPORT utilities::String toString() const override;
         
         /**
-         * @brief Default destructor of the DataBlock. This methods will call the AbstractAllocator::internalFree
+         * @brief Default destructor of the RawData. This methods will call the AbstractAllocator::internalFree
          * with a reference to self if the block is the root block (has no parents)
          */
-        CASIMIR_EXPORT virtual ~DataBlock();
+        CASIMIR_EXPORT virtual ~RawData();
    
         /**
          * @brief Return the data hold by the block
@@ -79,16 +59,7 @@ namespace Casimir::framework {
         CASIMIR_EXPORT void* data() const;
         
         /**
-         * @brief Get the parent object if exists
-         * @return The parent object of the current block. If the current DataBlock doesn't have any parent (is a root object)
-         * then simply return the nullptr
-         */
-        inline DataBlock* parent() const {
-            return m_parent;
-        }
-        
-        /**
-         * @brief Get the allocator that has create this DataBlock
+         * @brief Get the allocator that has create this RawData
          * @return The AbstractAllocator* that create the current block
          */
         inline AbstractAllocator* allocator() const {
@@ -102,10 +73,6 @@ namespace Casimir::framework {
         inline cuint size() const {
             return m_size;
         }
-    
-        inline DataBlock* parentOrElseSelf() {
-            return (m_parent != nullptr) ? m_parent : this;
-        }
     };
     
     /**
@@ -113,16 +80,16 @@ namespace Casimir::framework {
      */
     class AbstractAllocator : public utilities::StringSerializable, public ContextualObject, public IndexableObject {
         CASIMIR_DISABLE_COPY_MOVE(AbstractAllocator)
-        friend class DataBlock;
+        friend class RawData;
     protected:
         /**
          * @brief This protected function defines a new copyFunction. This function enable to copy data between multiple interface
          * @throw utilities::Exception if the two Allocators doesn't share the same context
-         * @param copyFunction The function to be called to transfer the data to a given DataBlock from a source DataBlock
+         * @param copyFunction The function to be called to transfer the data to a given RawData from a source RawData
          * @param destinationAllocator The destination allocator
          * @param sourceAllocator The source allocator
          */
-        CASIMIR_EXPORT static void registerCopyFunction(std::function<void(DataBlock*, const DataBlock*)> copyFunction,
+        CASIMIR_EXPORT static void registerCopyFunction(const std::function<void(RawData*, const RawData*, cuint, cuint, cuint)>& copyFunction,
                              AbstractAllocator* destinationAllocator,
                              AbstractAllocator* sourceAllocator);
         
@@ -135,39 +102,42 @@ namespace Casimir::framework {
                   IndexableObject(std::move(uuid)) {}
         
         /**
-         * @brief Create a DataBlock
-         * @param ptr The pointer to the data that will be used to create the DataBlock
+         * @brief Create a RawData
+         * @param ptr The pointer to the data that will be used to create the RawData
          * @param size The size of the chunk of data
          * @param allocator The allocator that called this function
-         * @return A new instance of DataBlock based on that information
-         * @warning One pointer must not be shared between multiple DataBlock. If you want to create (for instance a sub-block)
-         * use the methods DataBlock::subBlock
+         * @return A new instance of RawData based on that information
+         * @warning One pointer must not be shared between multiple RawData. If you want to create (for instance a sub-block)
+         * use the methods RawData::subBlock
          */
-        inline static DataBlock* createDataBlock(void* ptr, cuint size, AbstractAllocator* allocator) {
-            return new DataBlock(allocator->ctx(), ptr, size, allocator, nullptr, std::make_shared<bool>(true));
+        inline static RawData* createDataBlock(void* ptr, cuint size, AbstractAllocator* allocator) {
+            return new RawData(allocator->ctx(), ptr, size, allocator);
         }
         
         /**
-         * @brief This methods may only be called by the DataBlock is used to free a given DataBlock
+         * @brief This methods may only be called by the RawData is used to free a given RawData
          * @param dataBlock The dataBlock to be free
          */
-        virtual void internalFree(DataBlock* dataBlock) = 0;
+        virtual void internalFree(RawData* dataBlock) = 0;
     
     public:
         /**
-         * @brief Copy data from a DataBlock to another. DataBlock must have the same size
+         * @brief Copy data from a RawData to another. RawData must have the same size
          * @param to The block where the data will be copied
          * @param from The source data block
+         * @param length The length of the copy from the start in bytes. (How many bytes will we copied)
+         * @param offsetSource The offset of the copy (the source) from the start in bytes.
+         * @param offsetDestination The offset of the copy (the destination) from the start in bytes
          */
-        CASIMIR_EXPORT static void copy(DataBlock* to, const DataBlock* from);
+        CASIMIR_EXPORT static void copy(RawData* to, const RawData* from, cuint length, cuint offsetSource, cuint offsetDestination);
         
         /**
-         * @brief Allocate a DataBlock of a given size
+         * @brief Allocate a RawData of a given size
          * @throw utilities::Exception if the allocation process failed
          * @param size The size of the chunk of data we want to allocate
-         * @return The resulting DataBlock that hold both the data addresses and the size
+         * @return The resulting RawData that hold both the data addresses and the size
          */
-        virtual DataBlock* allocate(cuint size) = 0;
+        virtual RawData* allocate(cuint size) = 0;
         
         /**
          * @brief Return the interface that uses the current allocator

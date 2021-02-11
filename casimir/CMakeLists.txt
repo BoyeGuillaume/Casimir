@@ -24,6 +24,8 @@ set(CASIMIR_EXPORTED_HEADER
         "casimir/framework/datatype.hpp"
         "casimir/framework/allocator.hpp"
         "casimir/framework/indexable.hpp"
+        "casimir/framework/datachunk.hpp"
+        "casimir/framework/dataobject.hpp"
 )
 
 # List all of the other header used by the project but not exported by the library
@@ -45,11 +47,13 @@ set(CASIMIR_SOURCE_FILES
         "${CASIMIR_SOURCE_DIRS}/utilities/uuid.cpp"
         "${CASIMIR_SOURCE_DIRS}/utilities/logger.cpp"
         "${CASIMIR_SOURCE_DIRS}/utilities/cmutex.cpp"
+        "${CASIMIR_SOURCE_DIRS}/framework/interface.cpp"
         "${CASIMIR_SOURCE_DIRS}/framework/contextual_object.cpp"
         "${CASIMIR_SOURCE_DIRS}/framework/allocator.cpp"
         "${CASIMIR_SOURCE_DIRS}/framework/datatype.cpp"
         "${CASIMIR_SOURCE_DIRS}/framework/indexable.cpp"
-        "${CASIMIR_SOURCE_DIRS}/framework/interface.cpp"
+        "${CASIMIR_SOURCE_DIRS}/framework/datachunk.cpp"
+        "${CASIMIR_SOURCE_DIRS}/framework/dataobject.cpp"
 )
 
 # Retrieve all the headers to the expected format

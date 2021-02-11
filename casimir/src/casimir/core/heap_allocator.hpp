@@ -21,16 +21,16 @@ namespace Casimir::core {
 
     private:
         HeapInterface* m_interface;
-        std::unordered_set<framework::DataBlock*> m_blocks;
+        std::unordered_set<framework::RawData*> m_blocks;
         
     protected:
         /**
          * @brief free the given dataBlock
          * @throw utilities::Exception in case of operation failure
-         * @param dataBlock An framework::DataBlock that will be free. This operation is automatically called whenever
+         * @param dataBlock An framework::RawData that will be free. This operation is automatically called whenever
          * a root dataBlock is deleted
          */
-        CASIMIR_EXPORT void internalFree(framework::DataBlock *dataBlock) override;
+        CASIMIR_EXPORT void internalFree(framework::RawData *dataBlock) override;
         
         /**
          * @brief Default HeapAllocator destructor (only accessible from the heap interface
@@ -47,12 +47,12 @@ namespace Casimir::core {
         
     public:
         /**
-         * @brief Allocate a chunk of data stored into a given framework::DataBlock
+         * @brief Allocate a chunk of data stored into a given framework::RawData
          * @param size the size of the data we want to allocate
          * @throw utilities::Exception if the operation failed
-         * @return A new instance of framework::DataBlock that contains at least `size` bytes of raw data
+         * @return A new instance of framework::RawData that contains at least `size` bytes of raw data
          */
-        CASIMIR_EXPORT framework::DataBlock* allocate(cuint size) override;
+        CASIMIR_EXPORT framework::RawData* allocate(cuint size) override;
         
         /**
          * @brief Return the parent interface attached to the current allocator

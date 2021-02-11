@@ -23,9 +23,8 @@ TEST(Heap, HeapAllocation) {
 	EXPECT_EQ(heapInterface->allocator()->interface(), heapInterface);
 	
 	// Testing allocation
-	DataBlock *db_root = heapInterface->allocator()->allocate(500);
+	RawData *db_root = heapInterface->allocator()->allocate(500);
 	EXPECT_EQ(db_root->size(), 500);
-	EXPECT_EQ(db_root->parentOrElseSelf(), db_root);
 	EXPECT_EQ(db_root->allocator(), heapInterface->allocator());
 	
 	// Try to write thing to the data buffer

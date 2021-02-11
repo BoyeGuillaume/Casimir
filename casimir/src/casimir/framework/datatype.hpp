@@ -25,6 +25,14 @@ namespace Casimir::framework {
     };
     
     /**
+     * @brief The size of the given EDataType. Note that if the size isn't defines for the given type this will return 0
+     * (This is the case for EDataType::None and EDataType::Structure)
+     * @param dtype the type we want to retrieve the size
+     * @return The size (in bytes) of the given type
+     */
+    CASIMIR_EXPORT cuint sizeOf(EDataType dtype);
+    
+    /**
      * @brief The DataType class is a immutable object that stored information relative to a given type.
      *
      * It can be either a complex type built from multiple base-type where each sub-type is characterise by an Uuid or
@@ -46,26 +54,6 @@ namespace Casimir::framework {
         CASIMIR_EXPORT DataType(CasimirContext ctx, std::shared_ptr<__DataTypeHandle> handle);
     
     public:
-        /**
-         * @brief The class Parameters defines the sub-parameters hold by an DataType object
-         */
-        struct Parameters {
-            /**
-             * @brief The offset hold the distance between the start of the data chunk and the current parameters we are considering
-             */
-            cuint offset;
-            
-            /**
-             * @brief The size is the length (in byte) of the data required by the current Parameters
-             */
-            cuint size;
-            
-            /**
-             * @brief The type of the current sub-object. Notice that it cannot be another Structure to prevent recurrence issue
-             */
-            EDataType dtype;
-        };
-        
         /**
          * @brief Destructor of the DataType object
          */
@@ -90,6 +78,13 @@ namespace Casimir::framework {
         CASIMIR_EXPORT EDataType dtype() const;
         
         /**
+         * @brief Return the offset of the current object to the start of the parent structure (if any)
+         * Return 0 otherwise
+         * @return the offset of the current object relative to the start object
+         */
+        CASIMIR_EXPORT cuint offset() const;
+        
+        /**
          * @brief Detect if a given parameters (saved by key) is valid or not
          * @param key The name of the parameters we are considering
          * @return Whether or not the parameters exists in the current object
@@ -102,15 +97,31 @@ namespace Casimir::framework {
          * @param key The name of the parameters we are considering
          * @return The parameters linked to the given key if exists otherwise empty
          */
-        CASIMIR_EXPORT utilities::Optional<Parameters> at(const utilities::Uuid& key) const;
+        CASIMIR_EXPORT utilities::Optional<DataType> at(const utilities::Uuid& key) const;
+        
+        /**
+         * @brief Equality operator between two DataType object
+         * @param dataType The DataType we are comparing to
+         * @return Whether or not the two DataType object are the same
+         */
+        CASIMIR_EXPORT bool operator==(const DataType& dataType) const;
+        
+        /**
+         * @brief Determine whether or not the current instance isn't equal to the given one
+         * @param dataType The instance compare to
+         * @return Whether or not the two instance differs
+         */
+        inline bool operator!=(const DataType& dataType) const {
+            return !operator==(dataType);
+        }
         
         /**
          * @brief Return the Parameters linked to the given key
          * @throw Exception if no parameters is linked to the given jey
          * @param key The name of the parameters we are considering
-         * @return The Parameters linked to the given key
+         * @return The DataType linked to the given key
          */
-        inline Parameters operator[](const utilities::Uuid& key) const {
+        inline DataType operator[](const utilities::Uuid& key) const {
             return at(key).get();
         }
  
@@ -130,12 +141,13 @@ namespace Casimir::framework {
     private:
         std::shared_ptr<__DataTypeHandle> m_handle;
         std::shared_ptr<bool> m_builderDisabled;
+        CasimirContext m_ctx;
 
     public:
         /**
          * @brief Default constructor
          */
-        CASIMIR_EXPORT DataTypeBuilder();
+        CASIMIR_EXPORT DataTypeBuilder(CasimirContext ctx);
         
         /**
          * @brief Set the data type of the object. Notice that it cannot be either EDataType::None or EDataType::Structure
@@ -163,7 +175,7 @@ namespace Casimir::framework {
          * @param ctx The context used to instantiate the datatype
          * @return The new DataType object
          */
-        CASIMIR_EXPORT DataType create(CasimirContext ctx);
+        CASIMIR_EXPORT DataType create();
     };
     
     class ComplexDataTypeBuilder {
@@ -172,12 +184,13 @@ namespace Casimir::framework {
         std::shared_ptr<__DataTypeHandle> m_handle;
         std::shared_ptr<bool> m_builderDisabled;
         std::shared_ptr<cuint> m_currentOffset;
+        CasimirContext m_ctx;
     
         /**
          * @brief Default private constructor of the ComplexDataTypeBuilder
          * @param handle an opaque handle
          */
-        CASIMIR_EXPORT explicit ComplexDataTypeBuilder(std::shared_ptr<__DataTypeHandle> handle);
+        CASIMIR_EXPORT explicit ComplexDataTypeBuilder(CasimirContext ctx, std::shared_ptr<__DataTypeHandle> handle);
         
     public:
         /**
@@ -196,7 +209,7 @@ namespace Casimir::framework {
          * @param ctx the context of the new instance of DataType
          * @return The new instance of DataType
          */
-        CASIMIR_EXPORT DataType create(CasimirContext ctx);
+        CASIMIR_EXPORT DataType create();
     };
     
 }

@@ -31,12 +31,12 @@ namespace Casimir::core {
         }
         
         // Free all the tracked blocks of data
-        for(framework::DataBlock* block : m_blocks) {
+        for(framework::RawData* block : m_blocks) {
             delete block;
         }
     }
     
-    CASIMIR_EXPORT framework::DataBlock* HeapAllocator::allocate(cuint size) {
+    CASIMIR_EXPORT framework::RawData* HeapAllocator::allocate(cuint size) {
         const cuint blockAlignment = m_interface->m_config.blockAlignment();
         
         // Debug the memory
@@ -53,15 +53,15 @@ namespace Casimir::core {
             CASIMIR_THROW_EXCEPTION("InvalidAllocation", "Cannot allocate the required data");
         }
         
-        // Otherwise create the DataBlock
-        framework::DataBlock* block = createDataBlock(data, size, this);
+        // Otherwise create the RawData
+        framework::RawData* block = createDataBlock(data, size, this);
         if(m_interface->m_config.doesKeepTrackOfDataChunk()) {
             m_blocks.insert(block);
         }
         return block;
     }
     
-    CASIMIR_EXPORT void HeapAllocator::internalFree(framework::DataBlock* dataBlock) {
+    CASIMIR_EXPORT void HeapAllocator::internalFree(framework::RawData* dataBlock) {
 #ifdef CASIMIR_SAFE_CHECK
         if(dataBlock->allocator() != this) {
             CASIMIR_THROW_EXCEPTION("InvalidArgument", "Cannot free the given data block as not been initialized with"
@@ -81,11 +81,11 @@ namespace Casimir::core {
         }
         
         // Free the data
-        free(dataBlock->parentOrElseSelf()->data());
+        free(dataBlock->data());
 
         // Debug
         if(m_interface->m_config.debugMemory()) {
-            ctx()->logger(PrivateLogging::Note) << "Free the chunk of data at " << dataBlock->parentOrElseSelf()->data();
+            ctx()->logger(PrivateLogging::Note) << "Free the chunk of data at " << dataBlock->data();
         }
     }
     
