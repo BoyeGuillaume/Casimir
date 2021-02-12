@@ -17,8 +17,11 @@ namespace Casimir::framework {
      * of type into a data. It is also responsible of the inline mapping of the data structure into a inline vector
      */
     class DataChunk : public ContextualObject, public utilities::StringSerializable {
+        CASIMIR_DISABLE_COPY_MOVE(DataChunk)
     private:
+        AbstractAllocator* m_allocator;
         RawData* m_rawData;
+        bool m_ownData;
         DataType m_dtype;
         cuint m_offset;
         cuint m_length; // Number of elements (NOT BYTES) contained in the chunk
@@ -26,7 +29,18 @@ namespace Casimir::framework {
         
     public:
         /**
-         * @brief Default constructor of the DataChunk object
+         * @brief Default DataChunk constructor that take only an allocator and a type as well as a length. The resulting
+         * chunk won't be allocated but will own its data
+         * @param ctx Because the DataChunk is a ContextualObject it does require a context to work properly
+         * @param allocator The allocator that will be used to allocate / free the data
+         * @param dtype The type of the data allocated
+         * @param length The number of element we will have in the output result
+         */
+        CASIMIR_EXPORT DataChunk(CasimirContext ctx, AbstractAllocator* allocator, const DataType& dtype, cuint length);
+        
+        /**
+         * @brief Default constructor of the DataChunk object (the resulting chunk WILL NOT own the data and therefore
+         * won't be able to free it's data)
          * @param ctx Because the DataChunk is a Contextual object it does require a context to work properly
          * @param rawData The raw data used to instantiate the DataChunk
          * @param dtype The type that will be linked to the given raw Data
@@ -36,6 +50,11 @@ namespace Casimir::framework {
          * @throw utilities::Exception if the given sequence isn't contains in the RawData
          */
         CASIMIR_EXPORT DataChunk(CasimirContext ctx, RawData* rawData, const DataType& dtype, cuint offset, cuint length, cuint slice);
+        
+        /**
+         * @brief Default destructor
+         */
+        CASIMIR_EXPORT virtual ~DataChunk();
         
         /**
          * @brief Constructor of the DataChunk object
@@ -48,16 +67,6 @@ namespace Casimir::framework {
          */
         inline DataChunk(CasimirContext ctx, RawData* rawData, const DataType& dtype, cuint offset, cuint length)
         : DataChunk(ctx, rawData, dtype, offset, length, 0) {}
-    
-        /**
-         * @brief Constructor of the DataChunk object
-         * @param ctx Because the DataChunk is a Contextual object it does require a context to work properly
-         * @param rawData The raw data used to instantiate the DataChunk
-         * @param dtype The type that will be linked to the given raw Data
-         * @throw utilities::Exception if the given sequence isn't contains in the RawData
-         */
-        inline DataChunk(CasimirContext ctx, RawData* rawData, const DataType& dtype)
-        : DataChunk(ctx, rawData, dtype, 0, rawData->size() / dtype.sizeOf(), 0) {}
         
         /**
          * @brief Convert the current object to a human-readable String
@@ -68,21 +77,32 @@ namespace Casimir::framework {
         /**
          * @brief Return the pointer for a given position
          * @param position the index of the elements we want to retrieve
-         * @return The pointer at the given index
+         * @return The pointer at the given index if data is allocated empty otherwise
          * @throw utilities::Exception if the given `position` isn't contains in the chunk
          * the methods DataChunk::at(cuint, const utilities::Uuid&)
          */
-        CASIMIR_EXPORT void* at(cuint position) const;
+        CASIMIR_EXPORT utilities::Optional<void*> at(cuint position) const;
         
         /**
          * @brief Return the pointer for a given position and a given parameters
-         * @param position the index of the elements we want to retrieve
+         * @param position the index of the elements we want to retrviee
          * @param parameters the field utilities::Uuid that will be retrieved
          * @throw utilities::Exception if the given `position` isn't contains in the chunk
          * @throw utilities::Exception if the given `parameters` isn't found in the current dtype
-         * @return The pointer at the given index & parameters
+         * @return The pointer at the given index & parameters if data is allocated empty otherwise
          */
-        CASIMIR_EXPORT void* at(cuint position, const utilities::Uuid& parameters) const;
+        CASIMIR_EXPORT utilities::Optional<void*> at(cuint position, const utilities::Uuid& parameters) const;
+        
+        /**
+         * @brief Allocate the internal data to the required size. Produce a warning if the data is already allocated
+         */
+        CASIMIR_EXPORT void malloc();
+        
+        /**
+         * @brief Free the internal data. Produce a warning if no data has been found
+         * @throw utilities::Exception if the current chunk doesn't own the data
+         */
+        CASIMIR_EXPORT void free();
         
         /**
          * @brief Return the size of the given parameters
@@ -110,6 +130,14 @@ namespace Casimir::framework {
          */
         inline RawData* rawData() const {
             return m_rawData;
+        }
+        
+        /**
+         * @brief Determine whether or not the current data chunk is allocated or not
+         * @return Whether or not the current chunk is allocated
+         */
+        inline bool isAllocated() const {
+            return m_rawData != nullptr;
         }
         
         /**
@@ -144,6 +172,13 @@ namespace Casimir::framework {
             return m_slice;
         }
     
+    
+        /**
+         * @brief Copy data from a `source` DataChunk to a destination DataChunk
+         * @param dest The destination DataChunk
+         * @param source The source DataChunk
+         * @throw utilities::Exception if one of the DataChunk isn't allocated or if both doesn't share the same size and type
+         */
         CASIMIR_EXPORT static void copy(DataChunk* dest, const DataChunk* source);
     
     };

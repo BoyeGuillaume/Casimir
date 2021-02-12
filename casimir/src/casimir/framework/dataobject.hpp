@@ -22,8 +22,7 @@ namespace Casimir::framework {
         CASIMIR_DISABLE_COPY_MOVE(DataObject)
 
     private:
-        std::unordered_map<utilities::Uuid,DataChunk> m_chunkById;
-        std::vector<DataChunk> m_chunkObject;
+        std::unordered_map<utilities::Uuid,DataChunk*> m_chunkById;
         
     public:
         /**
@@ -33,7 +32,7 @@ namespace Casimir::framework {
          * @throw utilities::Exception if the chunks doesn't share the same context or doesn't have the same size
          * of doesn't have the same type
          */
-        CASIMIR_EXPORT explicit DataObject(CasimirContext ctx, std::vector<DataChunk> chunks);
+        CASIMIR_EXPORT explicit DataObject(CasimirContext ctx, std::vector<DataChunk*> chunks);
         
         /**
          * @brief Default destructor
@@ -60,7 +59,26 @@ namespace Casimir::framework {
          * @throw utilities::Exception if no interface has been found under the given uuid in the current object
          * @return The DataChunk linked to the given interface
          */
-        CASIMIR_EXPORT DataChunk at(const utilities::Uuid& interface) const;
+        CASIMIR_EXPORT DataChunk* at(const utilities::Uuid& interface) const;
+    
+        /**
+         * @brief Allocate the DataChunk associate to the given interface
+         * @param interface The `uuid` of the interface we will allocate
+         * @throw utilities::Exception if the interface as not been found or if the allocation process failed
+         */
+        inline void malloc(const utilities::Uuid& interface) {
+            at(interface)->malloc();
+        }
+        
+        /**
+         * @brief Release the DataChunk associate to the given interface
+         * @param interface The `uuid` of the interface we will free
+         * @throw utilities::Exception if the interface as not been found or if the fre process failed
+         */
+         inline void free(const utilities::Uuid& interface) {
+             at(interface)->free();
+         }
+        
     
         /**
           * @brief Return the DataChunk object at the given interface
@@ -68,7 +86,7 @@ namespace Casimir::framework {
           * @throw utilities::Exception if no interface has been found under the given uuid in the current object
           * @return The DataChunk linked to the given interface
           */
-        inline DataChunk operator[](const utilities::Uuid& interface) const {
+        inline DataChunk* operator[](const utilities::Uuid& interface) const {
             return at(interface);
         }
         
@@ -80,8 +98,8 @@ namespace Casimir::framework {
          * if the given index is out of range
          * @return The pointer to the data in the given interface at the given index
          */
-        inline void* at(const utilities::Uuid& interface, cuint index) const {
-            return at(interface).at(index);
+        inline utilities::Optional<void*> at(const utilities::Uuid& interface, cuint index) const {
+            return at(interface)->at(index);
         }
         
         /**
@@ -93,8 +111,8 @@ namespace Casimir::framework {
          * if the given index is out of range or if the parameters is found
          * @return The pointer to the data in the given interface at the given index with the given field
          */
-        inline void* at(const utilities::Uuid& interface, cuint index, const utilities::Uuid& parameters) const {
-            return at(interface).at(index, parameters);
+        inline utilities::Optional<void*> at(const utilities::Uuid& interface, cuint index, const utilities::Uuid& parameters) const {
+            return at(interface)->at(index, parameters);
         }
         
         /**
@@ -109,7 +127,7 @@ namespace Casimir::framework {
      */
     class DataObjectBuilder : public ContextualObject {
     private:
-        std::shared_ptr<std::vector<DataChunk>> m_chunks;
+        std::shared_ptr<std::vector<DataChunk*>> m_chunks;
         DataType m_dataType;
         cuint m_length;
 
@@ -122,7 +140,7 @@ namespace Casimir::framework {
          */
         inline explicit DataObjectBuilder(CasimirContext ctx, const DataType& dataType, cuint length)
         : ContextualObject(ctx),
-        m_chunks(std::make_shared<std::vector<DataChunk>>()),
+        m_chunks(std::make_shared<std::vector<DataChunk*>>()),
         m_dataType(dataType),
         m_length(length)
         {}
