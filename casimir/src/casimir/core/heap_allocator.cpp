@@ -43,9 +43,10 @@ namespace Casimir::core {
         }
         
         // Free all the tracked blocks of data
-        for(framework::RawData* block : m_blocks) {
-            delete block;
+        while (!m_blocks.empty()) {
+            delete *m_blocks.begin();
         }
+
     }
     
     CASIMIR_EXPORT framework::RawData* HeapAllocator::allocate(cuint size) {

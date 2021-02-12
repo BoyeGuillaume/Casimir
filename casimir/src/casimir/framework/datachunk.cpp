@@ -35,9 +35,9 @@ namespace Casimir::framework {
     m_dtype(dtype),
     m_offset(offset),
     m_length(length),
-    m_slice(0) {
+    m_slice(slice) {
 #ifdef CASIMIR_SAFE_CHECK
-        if (m_offset + m_length * (dtype.sizeOf() + m_slice) > rawData->size() ||
+        if (m_offset + m_length * (dtype.sizeOf() + m_slice) - m_slice > rawData->size() ||
             m_length * (dtype.sizeOf() + m_slice) > rawData->size()) {
             CASIMIR_THROW_EXCEPTION("IndexOutOfRange", "Cannot create the given DataChunk as the specified range"
                                                        "isn't contains in the range");
@@ -53,28 +53,19 @@ namespace Casimir::framework {
                ", offset=" + String::toString((cint) m_offset) + ")";
     }
     
-    CASIMIR_EXPORT Optional<void*> DataChunk::at(cuint position) const {
+    CASIMIR_EXPORT void* DataChunk::at(cuint position) const {
 #ifdef CASIMIR_SAFE_CHECK
         if (position >= m_length) {
             CASIMIR_THROW_EXCEPTION("IndexOutOfRange", "The given index isn't contains in the current chunk of data");
         }
 #endif
         // Evaluate the position
-        return (m_rawData == nullptr) ? Optional<void*>::empty() : Optional<void*>::of(
-                offsetOf(m_rawData->data(), m_offset + position * (m_length + m_slice)));
+        return (m_rawData == nullptr) ? nullptr :
+                offsetOf(m_rawData->data(), m_offset + position * (m_dtype.sizeOf() + m_slice));
     }
     
-    CASIMIR_EXPORT Optional<void*> DataChunk::at(cuint position, const utilities::Uuid& parameters) const {
-#ifdef CASIMIR_SAFE_CHECK
-        if (position >= m_length) {
-            CASIMIR_THROW_EXCEPTION("IndexOutOfRange", "The given index isn't contains in the current chunk of data");
-        }
-#endif
-        // Evaluator the position
-        return (m_rawData == nullptr) ?
-            Optional<void*>::empty() :
-            Optional<void*>::of(offsetOf(m_rawData->data(),m_offset + position * (m_length + m_slice) +
-                                                                                                 m_dtype.at(parameters).get().offset()));
+    CASIMIR_EXPORT void* DataChunk::at(cuint position, const utilities::Uuid& parameters) const {
+        return offsetOf(at(position), m_dtype.at(parameters).get().offset());
     }
     
     CASIMIR_EXPORT void DataChunk::copy(DataChunk* dest, const DataChunk* source) {

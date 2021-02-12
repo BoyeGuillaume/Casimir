@@ -15,6 +15,7 @@ namespace Casimir::framework {
     /**
      * @brief DataChunk defines a chunk with a length a type and a offset. It is used to introduce the concept
      * of type into a data. It is also responsible of the inline mapping of the data structure into a inline vector
+     * It can be allocated and free if not constructed directly from an existing RawData
      */
     class DataChunk : public ContextualObject, public utilities::StringSerializable {
         CASIMIR_DISABLE_COPY_MOVE(DataChunk)
@@ -77,11 +78,11 @@ namespace Casimir::framework {
         /**
          * @brief Return the pointer for a given position
          * @param position the index of the elements we want to retrieve
-         * @return The pointer at the given index if data is allocated empty otherwise
          * @throw utilities::Exception if the given `position` isn't contains in the chunk
          * the methods DataChunk::at(cuint, const utilities::Uuid&)
+         * @return The pointer at the given index if data is allocated nullptr otherwise
          */
-        CASIMIR_EXPORT utilities::Optional<void*> at(cuint position) const;
+        CASIMIR_EXPORT void* at(cuint position) const;
         
         /**
          * @brief Return the pointer for a given position and a given parameters
@@ -89,9 +90,9 @@ namespace Casimir::framework {
          * @param parameters the field utilities::Uuid that will be retrieved
          * @throw utilities::Exception if the given `position` isn't contains in the chunk
          * @throw utilities::Exception if the given `parameters` isn't found in the current dtype
-         * @return The pointer at the given index & parameters if data is allocated empty otherwise
+         * @return The pointer at the given index & parameters if data is allocated nullptr otherwise
          */
-        CASIMIR_EXPORT utilities::Optional<void*> at(cuint position, const utilities::Uuid& parameters) const;
+        CASIMIR_EXPORT void* at(cuint position, const utilities::Uuid& parameters) const;
         
         /**
          * @brief Allocate the internal data to the required size. Produce a warning if the data is already allocated
@@ -138,6 +139,16 @@ namespace Casimir::framework {
          */
         inline bool isAllocated() const {
             return m_rawData != nullptr;
+        }
+        
+        /**
+         * @brief The data hold by the current chunk as been allocated by the chunk and therefore the chunk
+         * own the data. (This is not the case if the current instance has been created using the constructor with
+         * RawData
+         * @return Whether or not the current chunk own the rawData
+         */
+        inline bool doesOwnData() const {
+            return m_ownData;
         }
         
         /**

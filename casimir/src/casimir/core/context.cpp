@@ -17,9 +17,14 @@ namespace Casimir {
     }
 
     CASIMIR_EXPORT void releaseContext(CasimirContext ctx) {
+        // Delete each interface
+        while (!ctx->interfaces.empty()) {
+            delete *ctx->interfaces.begin();
+        }
+
         // Display the end footer
         ctx->logger(PrivateLogging::Raw) << utilities::String('=', 110) << "\n\n\n\n\n";
-        
+
         // Delete the context
         delete (PrivateCasimirContext*) ctx;
     }

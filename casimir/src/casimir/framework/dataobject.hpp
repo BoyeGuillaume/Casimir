@@ -98,7 +98,7 @@ namespace Casimir::framework {
          * if the given index is out of range
          * @return The pointer to the data in the given interface at the given index
          */
-        inline utilities::Optional<void*> at(const utilities::Uuid& interface, cuint index) const {
+        inline void* at(const utilities::Uuid& interface, cuint index) const {
             return at(interface)->at(index);
         }
         
@@ -111,7 +111,7 @@ namespace Casimir::framework {
          * if the given index is out of range or if the parameters is found
          * @return The pointer to the data in the given interface at the given index with the given field
          */
-        inline utilities::Optional<void*> at(const utilities::Uuid& interface, cuint index, const utilities::Uuid& parameters) const {
+        inline void* at(const utilities::Uuid& interface, cuint index, const utilities::Uuid& parameters) const {
             return at(interface)->at(index, parameters);
         }
         
