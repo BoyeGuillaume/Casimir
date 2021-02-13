@@ -142,6 +142,14 @@ namespace Casimir::framework {
         }
         
         /**
+         * @brief A pointer to the allocator linked to the current data chunk
+         * @return The allocator linked to the current data chunk
+         */
+        inline AbstractAllocator* allocator() const {
+            return m_allocator;
+        }
+        
+        /**
          * @brief The data hold by the current chunk as been allocated by the chunk and therefore the chunk
          * own the data. (This is not the case if the current instance has been created using the constructor with
          * RawData

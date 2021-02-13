@@ -52,13 +52,13 @@ namespace Casimir::core {
     CASIMIR_EXPORT framework::RawData* HeapAllocator::allocate(cuint size) {
         const cuint blockAlignment = m_interface->m_config.blockAlignment();
         
-        // Debug the memory
-        if(m_interface->m_config.debugMemory()) {
-            ctx()->logger(PrivateLogging::Note) << "Allocate a chunk of " << size << " bytes into the heap";
-        }
-        
         // Allocate the data
         void *data = (blockAlignment == 0) ? malloc(size) : aligned_alloc(size, blockAlignment);
+
+        // Debug the memory
+        if (m_interface->m_config.debugMemory()) {
+            ctx()->logger(PrivateLogging::Note) << "Allocate a chunk of " << size << " bytes into the heap at " << data;
+        }
         
         // If the allocation failed
         if(data == nullptr) {

@@ -39,7 +39,7 @@ namespace Casimir::framework {
         }
 #endif
         for(DataChunk* chunk : chunks) {
-            m_chunkById.insert(std::make_pair(chunk->rawData()->allocator()->uuid(), chunk));
+            m_chunkById.insert(std::make_pair(chunk->allocator()->uuid(), chunk));
         }
     }
     
