@@ -26,6 +26,7 @@ set(CASIMIR_EXPORTED_HEADER
         "casimir/framework/indexable.hpp"
         "casimir/framework/datachunk.hpp"
         "casimir/framework/dataobject.hpp"
+        "casimir/framework/tensor_shape.hpp"
 )
 
 # List all of the other header used by the project but not exported by the library
@@ -54,6 +55,7 @@ set(CASIMIR_SOURCE_FILES
         "${CASIMIR_SOURCE_DIRS}/framework/indexable.cpp"
         "${CASIMIR_SOURCE_DIRS}/framework/datachunk.cpp"
         "${CASIMIR_SOURCE_DIRS}/framework/dataobject.cpp"
+        "${CASIMIR_SOURCE_DIRS}/framework/tensor_shape.cpp"
 )
 
 # Retrieve all the headers to the expected format
